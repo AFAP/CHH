@@ -1,0 +1,10 @@
+<resources>
+
+    <style name="Button_Common" parent="BaseButton">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+
+</resources>

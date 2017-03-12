@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/atom"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:paddingBottom="8dp"
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp"
+    android:paddingTop="8dp">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/atom_img"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        fresco:backgroundImage="@color/bg_activity"
+        fresco:placeholderImage="@drawable/ic_avatar_1"
+        fresco:roundAsCircle="true"
+        fresco:viewAspectRatio="1"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/atom_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/black_1"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="@string/app_name"/>
+
+            <TextView
+                android:id="@+id/atom_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_2"
+                android:textSize="12sp"
+                tools:text="20170101"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/atom_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black_2"
+            android:textSize="12sp"
+            tools:text="@string/app_name"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

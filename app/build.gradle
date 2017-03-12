@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.afap.discuz.chh"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("E:\\af.keystore")
+//            storeFile file("/Users/atom/workspace/AndroidStudioProjects/af.keystore")
+            storePassword "090d5dcf598ffacac71b5e67eb69406c"
+            keyAlias "af"
+            keyPassword "090d5dcf598ffacac71b5e67eb69406c"
+        }
+    }
+
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+    tasks.whenTaskAdded { task ->
+        if (task.name.contains("lint")//如果instant run不生效，把clean这行干掉
+                || task.name.equals("clean")//项目中有用到aidl则不可以舍弃这个任务
+                || task.name.contains("Aidl")//用不到测试的时候就可以先关闭
+                || task.name.contains("mockableAndroidJar")
+                || task.name.contains("UnitTest")
+                || task.name.contains("AndroidTest")//用不到NDK和JNI的也关闭掉
+                || task.name.contains("Ndk")
+                || task.name.contains("Jni")
+        ) {
+            task.enabled = false
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.2.0'
+    compile 'com.romandanylyk:pageindicatorview:+'
+    // 指示器
+
+
+    compile 'com.facebook.fresco:fresco:1.1.0'
+    compile 'cn.finalteam.rxgalleryfinal:library:+'
+    compile 'me.relex:photodraweeview:1.1.2'
+    // 图片选择器
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.tencent.bugly:crashreport:2.2.2'
+    compile('in.srain.cube:ultra-ptr:1.0.9.1-SNAPSHOT@aar') {
+        exclude group: 'in.srain.cube', module: 'clog'
+    }
+    compile('in.srain.cube:cube-sdk:1.0.44.33-SNAPSHOT@aar') {
+        exclude group: 'in.srain.cube', module: 'clog'
+    }
+    compile 'com.afap:utils:0.0.8@aar'
+    compile 'org.greenrobot:greendao:2.2.1'
+    compile 'org.greenrobot:greendao-generator:2.2.0'
+}
