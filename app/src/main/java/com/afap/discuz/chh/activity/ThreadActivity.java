@@ -3,6 +3,8 @@ package com.afap.discuz.chh.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.TextView;
@@ -75,6 +77,25 @@ public class ThreadActivity extends BaseActivity implements View.OnClickListener
         mLoadingView.setState(LoadingState.STATE_LOADING);
         mLoadingView.setVisibility(View.VISIBLE);
         getDetails();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_thread, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_floor) {
+            Intent intent = new Intent(this, ThreadFloorActivity.class);
+            intent.putExtra(ThreadActivity.KEY_ATOM, mAtom);
+            startActivity(intent);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

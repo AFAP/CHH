@@ -21,7 +21,9 @@
         android:supportsRtl="true"
 
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -36,6 +38,9 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ThreadActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.ThreadFloorActivity"
             android:screenOrientation="portrait"/>
 
 

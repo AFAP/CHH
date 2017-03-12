@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/load_more_list_view_ptr_frame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <in.srain.cube.views.loadmore.LoadMoreListViewContainer
+            android:id="@+id/load_more_list_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/load_more_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/transparent"
+                android:dividerHeight="1dp"
+                android:fadingEdge="none"
+                android:listSelector="@android:color/transparent"
+                android:scrollbarStyle="outsideOverlay"/>
+        </in.srain.cube.views.loadmore.LoadMoreListViewContainer>
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_write"
+            android:hint="@string/hint_comment"
+            android:maxLength="200"
+            android:maxLines="3"
+            android:textColor="@color/black_1"
+            android:textSize="14sp"/>
+
+        <ImageView
+            android:id="@+id/btn_send"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/bg_button_circle"
+            android:onClick="onClick"
+            android:padding="12dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_comment_send"/>
+
+    </LinearLayout>
+
+</LinearLayout>
