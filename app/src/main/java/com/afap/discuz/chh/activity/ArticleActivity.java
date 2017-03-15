@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.greendao.CategoryListAtom;
+import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.discuz.chh.widget.loading.LoadingState;
 import com.afap.discuz.chh.widget.loading.LoadingView;
@@ -24,7 +25,6 @@ import org.jsoup.nodes.Element;
 import java.util.ArrayList;
 
 import rx.Observable;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -174,7 +174,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new BaseSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         mLoadingView.setVisibility(View.GONE);
@@ -204,14 +204,10 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                         tv_comment_num.setText(String.valueOf(totalCommentCount));
                     }
 
-                    @Override
-                    public void onCompleted() {
-                        BuglyLog.i("onCompleted", "----onCompleted----");
-                    }
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        super.onError(e);
                         mLoadingView.setState(LoadingState.STATE_EMPTY);
                     }
                 });

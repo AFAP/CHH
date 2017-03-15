@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.adapter.ArticleCommentAdapter;
 import com.afap.discuz.chh.model.ArticleComment;
+import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.utils.ToastUtil;
 import com.tencent.bugly.crashreport.BuglyLog;
@@ -28,7 +29,6 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -81,8 +81,6 @@ public class ArticleCommentActivity extends BaseActivity implements View.OnClick
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 //实现下拉刷新的功能
-                BuglyLog.i("test", "-----onRefreshBegin-----");
-
                 getList(1);
             }
         });
@@ -133,7 +131,7 @@ public class ArticleCommentActivity extends BaseActivity implements View.OnClick
                 .getArticleComments(mArticleID, pageNo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new BaseSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         currentPageNO = pageNo;
@@ -151,21 +149,12 @@ public class ArticleCommentActivity extends BaseActivity implements View.OnClick
                         mPtrFrameLayout.refreshComplete();
                         //第一个参数是：数据是否为空；第二个参数是：是否还有更多数据
                         mLoadMoreListViewContainer.loadMoreFinish(list.isEmpty(), list.size() == PAGE_SIZE);
-
-
-                        for (ArticleComment atom : list) {
-                            BuglyLog.w("aaaa", atom.toString());
-                        }
                     }
 
-                    @Override
-                    public void onCompleted() {
-                        BuglyLog.i("onCompleted", "----onCompleted----");
-                    }
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        super.onError(e);
 
                         if (pageNo == 1) {
                             mPtrFrameLayout.refreshComplete();

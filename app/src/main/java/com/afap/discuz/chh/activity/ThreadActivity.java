@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.greendao.CategoryListAtom;
+import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.discuz.chh.widget.loading.LoadingState;
 import com.afap.discuz.chh.widget.loading.LoadingView;
@@ -119,7 +120,7 @@ public class ThreadActivity extends BaseActivity implements View.OnClickListener
                 .getThread(mAtom.getHref())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new BaseSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         mLoadingView.setVisibility(View.GONE);
@@ -190,14 +191,10 @@ public class ThreadActivity extends BaseActivity implements View.OnClickListener
                         BuglyLog.i("htmlStr", htmlStr);
                     }
 
-                    @Override
-                    public void onCompleted() {
-                        BuglyLog.i("onCompleted", "----onCompleted----");
-                    }
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        super.onError(e);
                         mLoadingView.setState(LoadingState.STATE_EMPTY);
                     }
                 });

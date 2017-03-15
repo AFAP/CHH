@@ -1,37 +1,29 @@
 package com.afap.discuz.chh.net;
 
-import android.text.TextUtils;
-
-
 import com.afap.discuz.chh.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
-import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.CallAdapter;
-import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.Headers;
 
 public class Network {
     private static APIService apis;
 
     private static CallAdapter.Factory rxJavaCallAdapterFactory = RxJavaCallAdapterFactory.create();
+    private static OkHttpClient okHttpClient;
 
     public static APIService getAPIService() {
         if (apis == null) {
@@ -40,7 +32,7 @@ public class Network {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             // OkHttp3.0的使用方式
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            okHttpClient = new OkHttpClient.Builder()
                     .retryOnConnectionFailure(true)
                     .addInterceptor(loggingInterceptor)
                     .addInterceptor(new Interceptor() {
@@ -57,17 +49,16 @@ public class Network {
                         }
                     })
                     .cookieJar(new CookieJar() {
-                        HashMap<HttpUrl, List<Cookie>> cookieStore = new HashMap<>();
+                        List<Cookie> cookielist;
 
                         @Override
                         public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                            cookieStore.put(url, cookies);
+                            this.cookielist = cookies;
                         }
 
                         @Override
                         public List<Cookie> loadForRequest(HttpUrl url) {
-                            List<Cookie> cookies = cookieStore.get(url);
-                            return cookies != null ? cookies : new ArrayList<Cookie>();
+                            return cookielist != null ? cookielist : new ArrayList<Cookie>();
                         }
                     })
                     .build();

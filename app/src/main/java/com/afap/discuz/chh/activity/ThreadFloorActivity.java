@@ -7,20 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
-import com.afap.discuz.chh.adapter.ArticleCommentAdapter;
 import com.afap.discuz.chh.adapter.ThreadFloorAdapter;
 import com.afap.discuz.chh.greendao.CategoryListAtom;
-import com.afap.discuz.chh.model.ArticleComment;
 import com.afap.discuz.chh.model.ThreadFloor;
+import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
-import com.afap.discuz.chh.widget.loading.LoadingState;
 import com.afap.utils.ContextUtil;
-import com.afap.utils.ToastUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.tencent.bugly.crashreport.BuglyLog;
 
 import org.jsoup.Jsoup;
@@ -39,7 +33,6 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -47,7 +40,6 @@ import rx.schedulers.Schedulers;
  * 帖子各楼层
  */
 public class ThreadFloorActivity extends BaseActivity {
-    public final static String KEY_ID = "key_id";
 
     private final static int PAGE_SIZE = 30;
 
@@ -131,12 +123,19 @@ public class ThreadFloorActivity extends BaseActivity {
 
 
     private void getList(final int pageNo) {
+        String href = mAtom.getHref();
+        String tarhref = pageNo + "-1.html";
+        href = href.replaceAll("1-1.html", tarhref);
+
+
+
+
         Network
                 .getAPIService()
-                .getThread(mAtom.getHref())
+                .getThread(href)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new BaseSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         currentPageNO = pageNo;
@@ -149,7 +148,6 @@ public class ThreadFloorActivity extends BaseActivity {
 
                         // 楼层集合
                         Element div_postlist = doc.getElementById("postlist");
-
 
 
                         Elements div_floors = div_postlist.getElementsByAttributeValueMatching("id", "post_\\d{4,}");
@@ -226,20 +224,19 @@ public class ThreadFloorActivity extends BaseActivity {
 
                         mPtrFrameLayout.refreshComplete();
                         //第一个参数是：数据是否为空；第二个参数是：是否还有更多数据
-                        mLoadMoreListViewContainer.loadMoreFinish(mAdapterList.isEmpty(), mAdapterList.size() ==
-                                PAGE_SIZE);
+                        boolean hasMore = false;
+                        if (pageNo == 1 && mAdapterList.size() == PAGE_SIZE - 1) {
+                            hasMore = true;
+                        } else if (pageNo > 1 && mAdapterList.size() == PAGE_SIZE) {
+                            hasMore = true;
+                        }
 
-
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        BuglyLog.i("onCompleted", "----onCompleted----");
+                        mLoadMoreListViewContainer.loadMoreFinish(mAdapterList.isEmpty(), hasMore);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        super.onError(e);
                         if (pageNo == 1) {
                             mPtrFrameLayout.refreshComplete();
                         } else {

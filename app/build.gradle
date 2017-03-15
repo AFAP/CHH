@@ -11,25 +11,6 @@ android {
         versionName "1.0.1"
     }
 
-    signingConfigs {
-        release {
-            storeFile file("E:\\af.keystore")
-//            storeFile file("/Users/atom/workspace/AndroidStudioProjects/af.keystore")
-            storePassword "090d5dcf598ffacac71b5e67eb69406c"
-            keyAlias "af"
-            keyPassword "090d5dcf598ffacac71b5e67eb69406c"
-        }
-    }
-
-
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.release
-        }
-        release {
-            signingConfig signingConfigs.release
-        }
-    }
 //    tasks.whenTaskAdded { task ->
 //        if (task.name.contains("lint")//如果instant run不生效，把clean这行干掉
 //                || task.name.equals("clean")//项目中有用到aidl则不可以舍弃这个任务
@@ -55,7 +36,6 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.2.0'
     compile 'com.romandanylyk:pageindicatorview:+'
-    // 指示器
 
 
     compile 'com.facebook.fresco:fresco:1.1.0'
