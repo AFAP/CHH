@@ -1,10 +1,13 @@
 package com.afap.discuz.chh.net;
 
 import com.afap.discuz.chh.Constant;
+import com.tencent.bugly.crashreport.BuglyLog;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -14,16 +17,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Network {
     private static APIService apis;
-
-    private static CallAdapter.Factory rxJavaCallAdapterFactory = RxJavaCallAdapterFactory.create();
-    private static OkHttpClient okHttpClient;
+    public static Map<String, String> mUrlMap = new HashMap<>();
 
     public static APIService getAPIService() {
         if (apis == null) {
@@ -32,20 +32,27 @@ public class Network {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             // OkHttp3.0的使用方式
-            okHttpClient = new OkHttpClient.Builder()
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .retryOnConnectionFailure(true)
                     .addInterceptor(loggingInterceptor)
                     .addInterceptor(new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request request = chain.request();
+                            String reqUrl = request.url().toString().replaceAll(Constant.HOST_APP, "");
+
                             Request.Builder builder1 = request.newBuilder();
                             Request build = builder1
                                     .addHeader("contentType", "text/html; charset=utf-8")
-                                    .addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36")
+                                    .addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) " +
+                                            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36")
                                     .build();
 
-                            return chain.proceed(build);
+
+                            Response response = chain.proceed(build);
+                            String rspUrl = response.request().url().toString().replaceAll(Constant.HOST_APP, "");
+                            mUrlMap.put(reqUrl, rspUrl);
+                            return response;
                         }
                     })
                     .cookieJar(new CookieJar() {
@@ -66,7 +73,7 @@ public class Network {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Constant.HOST_APP)
                     .addConverterFactory(ScalarsConverterFactory.create())
-                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(okHttpClient)
                     .build();
             apis = retrofit.create(APIService.class);

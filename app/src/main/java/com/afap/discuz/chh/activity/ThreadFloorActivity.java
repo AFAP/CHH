@@ -123,16 +123,18 @@ public class ThreadFloorActivity extends BaseActivity {
 
 
     private void getList(final int pageNo) {
-        String href = mAtom.getHref();
-        String tarhref = pageNo + "-1.html";
-        href = href.replaceAll("1-1.html", tarhref);
-
-
-
+        String orgHref = mAtom.getHref();
+        String realHref = Network.mUrlMap.get(orgHref);
+        if (TextUtils.isEmpty(realHref)) {
+            realHref = orgHref;
+        } else {
+            String tarhref = pageNo + "-1.html";
+            realHref = realHref.replaceAll("1-1\\.html", tarhref);
+        }
 
         Network
                 .getAPIService()
-                .getThread(href)
+                .getThread(realHref)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseSubscriber<String>() {
@@ -145,14 +147,16 @@ public class ThreadFloorActivity extends BaseActivity {
 
                         Document doc = Jsoup.parse(s);
 
-
                         // 楼层集合
                         Element div_postlist = doc.getElementById("postlist");
 
-
                         Elements div_floors = div_postlist.getElementsByAttributeValueMatching("id", "post_\\d{4,}");
 
-                        for (int i = 1; i < div_floors.size(); i++) {
+                        for (int i = 0; i < div_floors.size(); i++) {
+                            if (pageNo == 1 && i == 0) {
+                                continue;
+                            }
+
 
                             StringBuffer sb = new StringBuffer();
 
@@ -187,7 +191,6 @@ public class ThreadFloorActivity extends BaseActivity {
                                             imgdata = arr[0].trim();
                                             onload = arr[1].trim();
                                         }
-                                        BuglyLog.w("aaa", aaa);
                                     }
                                 }
 
@@ -207,7 +210,7 @@ public class ThreadFloorActivity extends BaseActivity {
                                 item.setName(name);
                                 item.setAvatarUrl(url_avatar);
                                 item.setTime(time);
-                                item.setFloorNum((i + 1));
+                                item.setFloorNum(((pageNo - 1) * PAGE_SIZE + i + 1));
                                 item.setContentHtml(htmlStr);
                                 mAdapterList.add(item);
                             } catch (Exception e) {
@@ -215,10 +218,7 @@ public class ThreadFloorActivity extends BaseActivity {
                             } finally {
                                 continue;
                             }
-
-
                         }
-
 
                         mAdapter.notifyDataSetChanged();
 
