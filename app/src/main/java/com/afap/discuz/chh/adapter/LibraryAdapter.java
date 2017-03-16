@@ -1,16 +1,12 @@
 package com.afap.discuz.chh.adapter;
 
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 
 import com.afap.discuz.chh.R;
-import com.afap.discuz.chh.activity.MainActivity;
-import com.afap.discuz.chh.model.Category;
 import com.afap.discuz.chh.model.Library;
 
 import java.util.List;

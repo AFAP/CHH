@@ -26,6 +26,7 @@ public class LibraryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
+        setToolbarTitle(R.string.title_library);
 
         initData();
 
@@ -45,8 +46,13 @@ public class LibraryActivity extends BaseActivity {
 
     private void initData() {
         mAdapterList = new ArrayList<>();
+        mAdapterList.add(new Library("Okhttp", "", "https://github.com/square/okhttp"));
+        mAdapterList.add(new Library("Retrofit", "", "https://github.com/square/retrofit"));
         mAdapterList.add(new Library("Fresco", "图片加载库", "https://github.com/facebook/fresco"));
+        mAdapterList.add(new Library("PhotoDraweeView", "", "https://github.com/ongakuer/PhotoDraweeView"));
+        mAdapterList.add(new Library("RxGalleryFinal", "", "https://github.com/FinalTeam/RxGalleryFinal"));
+        mAdapterList.add(new Library("EventBus", "", "https://github.com/greenrobot/EventBus"));
+        mAdapterList.add(new Library("GreenDAO", "", "https://github.com/greenrobot/greenDAO"));
+        mAdapterList.add(new Library("Ultra Pull To Refresh", "", "https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh"));
     }
-
-
 }

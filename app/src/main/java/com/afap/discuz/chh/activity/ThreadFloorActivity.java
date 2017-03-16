@@ -70,8 +70,6 @@ public class ThreadFloorActivity extends BaseActivity {
 
         //设置下拉刷新组件和事件监听
         mPtrFrameLayout = (PtrFrameLayout) findViewById(R.id.load_more_list_view_ptr_frame);
-        mPtrFrameLayout.setLoadingMinTime(2000);
-        mPtrFrameLayout.setDurationToCloseHeader(2000);
         mPtrFrameLayout.setHeaderView(header);
         mPtrFrameLayout.addPtrUIHandler(header);
 
@@ -118,7 +116,12 @@ public class ThreadFloorActivity extends BaseActivity {
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //            }
 //        });
-        mPtrFrameLayout.autoRefresh();
+        mPtrFrameLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPtrFrameLayout.autoRefresh(false);
+            }
+        }, 200);
     }
 
 
@@ -186,7 +189,7 @@ public class ThreadFloorActivity extends BaseActivity {
                                 for (Element element : scripts) {
                                     if (TextUtils.equals(element.tagName(), "script")) {
                                         String aaa = element.html();
-                                        if (aaa.indexOf("attachimggroup(" + mainId + ")") != -1) {
+                                        if (aaa.contains("attachimggroup(" + mainId + ")")) {
                                             String[] arr = aaa.split(";");
                                             imgdata = arr[0].trim();
                                             onload = arr[1].trim();

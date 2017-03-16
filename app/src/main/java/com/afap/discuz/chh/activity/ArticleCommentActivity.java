@@ -66,8 +66,6 @@ public class ArticleCommentActivity extends BaseActivity implements View.OnClick
 
         //设置下拉刷新组件和事件监听
         mPtrFrameLayout = (PtrFrameLayout) findViewById(R.id.load_more_list_view_ptr_frame);
-        mPtrFrameLayout.setLoadingMinTime(2000);
-        mPtrFrameLayout.setDurationToCloseHeader(2000);
         mPtrFrameLayout.setHeaderView(header);
         mPtrFrameLayout.addPtrUIHandler(header);
 
@@ -112,7 +110,12 @@ public class ArticleCommentActivity extends BaseActivity implements View.OnClick
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //            }
 //        });
-        mPtrFrameLayout.autoRefresh();
+        mPtrFrameLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPtrFrameLayout.autoRefresh(false);
+            }
+        }, 200);
     }
 
 
