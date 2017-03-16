@@ -48,6 +48,11 @@
             android:name=".activity.PicBrowseActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".activity.LibraryActivity"
+            android:screenOrientation="portrait"/>
+
+
 
         <activity
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
