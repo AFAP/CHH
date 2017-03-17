@@ -6,15 +6,14 @@
 
     <color name="bg_activity">#F0F0F0</color>
     <!-- 按钮遮罩颜色 -->
-    <color name="ripple_mask">#aaffffff</color>
+    <color name="ripple_mask">#AAAAAA</color>
 
     <color name="transparent">#00000000</color>
-    <color name="white">#FFFFFF</color><!--白色 -->
-    <color name="black">#000000</color><!--黑色 -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 
 
     <color name="black_1">#333333</color>
     <color name="black_2">#666666</color>
     <color name="black_3">#999999</color>
-
 </resources>

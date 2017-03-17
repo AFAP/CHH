@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.greendao.CategoryListAtom;
 import com.facebook.drawee.view.SimpleDraweeView;
+
 import java.util.List;
 
 
@@ -38,9 +39,9 @@ public class CategoryListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         CategoryListAtom atom = mData.get(position);
-        ViewHolder mHolder = null;
+        ViewHolder mHolder;
         if (convertView == null) {
 
             mHolder = new ViewHolder();
@@ -61,7 +62,6 @@ public class CategoryListAdapter extends BaseAdapter {
         mHolder.atom_name.setText(atom.getTitle());
         mHolder.atom_desc.setText(atom.getContent());
         mHolder.atom_img.setImageURI(atom.getThumb_url());
-
         return convertView;
     }
 

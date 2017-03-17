@@ -9,19 +9,10 @@ import android.widget.TextView;
 
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.model.ArticleComment;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
 public class ArticleCommentAdapter extends BaseAdapter {
-
-    private int[] avatars = {
-            R.drawable.ic_avatar_1, R.drawable.ic_avatar_2, R.drawable.ic_avatar_3, R.drawable.ic_avatar_4,
-            R.drawable.ic_avatar_5, R.drawable.ic_avatar_6, R.drawable.ic_avatar_7, R.drawable.ic_avatar_8,
-            R.drawable.ic_avatar_9, R.drawable.ic_avatar_10, R.drawable.ic_avatar_11, R.drawable.ic_avatar_12,
-            R.drawable.ic_avatar_13, R.drawable.ic_avatar_14, R.drawable.ic_avatar_15, R.drawable.ic_avatar_16,
-            R.drawable.ic_avatar_17};
-
 
     private List<ArticleComment> mData;
     private LayoutInflater mInflater;
@@ -59,7 +50,6 @@ public class ArticleCommentAdapter extends BaseAdapter {
             }
             convertView = mInflater.inflate(R.layout.atom_list_article_comment, null);
             mHolder.atom = convertView.findViewById(R.id.atom);
-            mHolder.atom_img = (SimpleDraweeView) convertView.findViewById(R.id.atom_img);
             mHolder.atom_name = (TextView) convertView.findViewById(R.id.atom_name);
             mHolder.atom_time = (TextView) convertView.findViewById(R.id.atom_time);
             mHolder.atom_content = (TextView) convertView.findViewById(R.id.atom_content);
@@ -72,15 +62,11 @@ public class ArticleCommentAdapter extends BaseAdapter {
         mHolder.atom_time.setText(atom.getTime());
         mHolder.atom_content.setText(Html.fromHtml(atom.getContentHtml()));
 
-        mHolder.atom_img.getHierarchy().setPlaceholderImage(avatars[position % avatars.length]);
-
-
         return convertView;
     }
 
     class ViewHolder {
         View atom;
-        SimpleDraweeView atom_img;
         TextView atom_name;
         TextView atom_time;
         TextView atom_content;

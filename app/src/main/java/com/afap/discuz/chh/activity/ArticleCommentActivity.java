@@ -13,7 +13,6 @@ import com.afap.discuz.chh.model.ArticleComment;
 import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.utils.ToastUtil;
-import com.tencent.bugly.crashreport.BuglyLog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -105,11 +104,6 @@ public class ArticleCommentActivity extends BaseActivity implements View.OnClick
         mAdapterList = new ArrayList<>();
         mAdapter = new ArticleCommentAdapter(mAdapterList);
         mListView.setAdapter(mAdapter);
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            }
-//        });
         mPtrFrameLayout.postDelayed(new Runnable() {
             @Override
             public void run() {

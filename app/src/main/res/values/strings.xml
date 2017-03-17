@@ -11,6 +11,7 @@
 
 
     <string name="action_about">关于</string>
+    <string name="action_floor">查看跟帖</string>
 
 
     <string name="title_library">开源库</string>

@@ -136,7 +136,7 @@ public class CategoryListFragment extends Fragment {
 //        mListView.addHeaderView(headerMarginView);
 
         mAdapterList = new ArrayList<>();
-        mAdapter = new CategoryListAdapter(mAdapterList);
+        mAdapter = new CategoryListAdapter( mAdapterList);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
