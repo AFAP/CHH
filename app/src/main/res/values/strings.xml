@@ -11,9 +11,11 @@
 
 
     <string name="action_about">关于</string>
+    <string name="action_library">开源库</string>
     <string name="action_floor">查看跟帖</string>
 
 
+    <string name="title_about">关于</string>
     <string name="title_library">开源库</string>
 
 
@@ -21,6 +23,21 @@
 
 
     <string name="todev">待开发……</string>
+
+    <string name="tip_about">
+        \n
+        1.该客户端为非官方应用；\n\n
+        2.本应用开源，\n
+        &#160;&#160;&#160;&#160;项目地址：https://github.com/AFAP/CHH；\n
+        &#160;&#160;&#160;&#160;如有问题和建议，可以提Issues；\n\n
+        3.实现说明：\n
+        &#160;&#160;&#160;&#160;数据直接从官网获得，不经过其他服务器；\n
+        &#160;&#160;&#160;&#160;手机端获得数据后，使用Jsoup解析成规范化数据；\n
+        &#160;&#160;&#160;&#160;按照手机端的样式来展示获取的数据；\n\n
+        4.如有侵权，请联系：&#160;afap@foxmail.com
+    </string>
+
+
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

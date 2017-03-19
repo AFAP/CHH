@@ -30,14 +30,4 @@
         android:layout_weight="1"
         android:divider="@null"/>
 
-    <TextView
-        android:id="@+id/versionName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:gravity="center"
-        android:textColor="@color/black_2"
-        android:textSize="15sp"/>
-
-
 </LinearLayout>

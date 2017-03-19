@@ -81,6 +81,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (item.getItemId() == R.id.action_library) {
             Intent intent = new Intent(this, LibraryActivity.class);
             startActivity(intent);
             return true;
@@ -137,10 +141,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         };
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        TextView tv_versionName = (TextView) findViewById(R.id.versionName);
-        String versionNam = ContextUtil.getAppVersionName(this);
-        tv_versionName.setText(String.format(getString(R.string.app_version_format), versionNam));
 
 
         ListView mListView = (ListView) findViewById(R.id.category_list);

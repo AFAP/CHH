@@ -1,8 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_about"
-        android:icon="@drawable/ic_toolbar_about"
         android:title="@string/action_about"
-        app:showAsAction="always" />
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_library"
+        android:title="@string/action_library"
+        app:showAsAction="never"/>
 </menu>
