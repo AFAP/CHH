@@ -42,20 +42,15 @@
         <activity
             android:name=".activity.ThreadFloorActivity"
             android:screenOrientation="portrait"/>
-
-
         <activity
             android:name=".activity.PicBrowseActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.AboutActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LibraryActivity"
             android:screenOrientation="portrait"/>
-
-
 
         <activity
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
@@ -65,12 +60,6 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-
-
-        <activity
-            android:name=".activity.ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme"/>
 
     </application>

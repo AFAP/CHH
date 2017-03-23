@@ -1,15 +1,14 @@
 package com.afap.discuz.chh.activity;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,22 +17,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afap.discuz.chh.R;
-import com.facebook.common.references.CloseableReference;
-import com.facebook.datasource.DataSource;
+import com.afap.discuz.chh.utils.Util;
+import com.afap.utils.ToastUtil;
+import com.facebook.binaryresource.BinaryResource;
+import com.facebook.binaryresource.FileBinaryResource;
+import com.facebook.cache.common.CacheKey;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.DraweeHolder;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.core.ImagePipeline;
-import com.facebook.imagepipeline.image.CloseableImage;
-import com.facebook.imagepipeline.image.CloseableStaticBitmap;
+import com.facebook.imagepipeline.cache.DefaultCacheKeyFactory;
+import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import java.io.File;
 import java.util.List;
 
 import me.relex.photodraweeview.PhotoDraweeView;
@@ -42,15 +40,13 @@ public class PicBrowseActivity extends Activity {
     public static final String KEY_INDEX = "index";
     public static final String KEY_LIST = "list";
 
-    private LayoutInflater mInflater;
-
     private List<String> mPics;
     private int mIndex;
 
     private ViewPager mViewPager;// 页卡内容
 
     private TextView tv_index;
-
+    private ImageView btn_download;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +55,17 @@ public class PicBrowseActivity extends Activity {
         setContentView(R.layout.activity_pictures_browser);
 
 
-        mInflater = LayoutInflater.from(this);
         mPics = getIntent().getStringArrayListExtra(KEY_LIST);
         mIndex = getIntent().getIntExtra(KEY_INDEX, 0);
 
         tv_index = (TextView) findViewById(R.id.index);
+        btn_download = (ImageView) findViewById(R.id.btn_download);
+        btn_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savePicture();
+            }
+        });
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(new MyPagerAdapter());
@@ -160,44 +162,33 @@ public class PicBrowseActivity extends Activity {
         }
     }
 
-    private void displayImage(Uri url, ResizeOptions imageSize, final ImageView imageView, final
-    DraweeHolder<GenericDraweeHierarchy> draweeHolder) {
-        ImageRequest imageRequest = ImageRequestBuilder
-                .newBuilderWithSource(url)
-                .setResizeOptions(imageSize)//图片目标大小
-                .build();
-        ImagePipeline imagePipeline = Fresco.getImagePipeline();
+    private void savePicture() {
+        String imgUrl = mPics.get(mIndex);
+        String picName = imgUrl.substring(imgUrl.lastIndexOf("/") + 1);
 
-        final DataSource<CloseableReference<CloseableImage>> dataSource = imagePipeline.fetchDecodedImage
-                (imageRequest, this);
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setOldController(draweeHolder.getController())
-                .setImageRequest(imageRequest)
-                .setControllerListener(new BaseControllerListener<ImageInfo>() {
-                    @Override
-                    public void onFinalImageSet(String s, ImageInfo imageInfo, Animatable animatable) {
-                        CloseableReference<CloseableImage> imageReference = null;
-                        try {
-                            imageReference = dataSource.getResult();
-                            if (imageReference != null) {
-                                CloseableImage image = imageReference.get();
-                                if (image != null && image instanceof CloseableStaticBitmap) {
-                                    CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
-                                    Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
-                                    if (bitmap != null && imageView != null) {
-                                        imageView.setImageBitmap(bitmap);
-                                    }
-                                }
-                            }
-                        } finally {
-                            dataSource.close();
-                            CloseableReference.closeSafely(imageReference);
-                        }
-                    }
-                })
-                .setTapToRetryEnabled(true)
+        ImageRequest imageRequest = ImageRequestBuilder
+                .newBuilderWithSource(Uri.parse(imgUrl))
                 .build();
-        draweeHolder.setController(controller);
+        CacheKey cacheKey = DefaultCacheKeyFactory
+                .getInstance()
+                .getEncodedCacheKey(imageRequest, Uri.parse(imgUrl));
+        BinaryResource bRes = ImagePipelineFactory
+                .getInstance()
+                .getMainFileCache()
+                .getResource(cacheKey);
+
+        if (bRes == null) {
+            return;
+        }
+        File file = ((FileBinaryResource) bRes).getFile();
+        if (file != null) {
+            File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "CHH");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            Util.copyFile(file, dir, picName);
+            ToastUtil.showShort(String.format(getString(R.string.tip_pic_saved_format), dir.getPath()));
+        }
     }
 
 
