@@ -27,5 +27,18 @@
 
     <style name="Button_Common" parent="BaseButton"></style>
 
+    <style name="Category" parent="Theme.AppCompat.Light">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:background">@drawable/bg_category</item>
+        <item name="android:textColor">@color/black_1</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+
+
 
 </resources>

@@ -28,8 +28,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:design:25.3.0'
 
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
@@ -53,4 +52,7 @@ dependencies {
     compile 'com.afap:utils:0.0.8@aar'
     compile 'org.greenrobot:greendao:2.2.1'
     compile 'org.greenrobot:greendao-generator:2.2.0'
+
+    compile 'com.google.android:flexbox:0.2.6'
+
 }

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#dddddd"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
@@ -14,20 +14,62 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="0dp"
         android:onClick="onClick"
-        android:padding="0dp"
         android:visibility="gone"
-        fresco:backgroundImage="@color/bg_activity"
         fresco:placeholderImage="@drawable/ic_avatar_1"
+        fresco:placeholderImageScaleType="fitCenter"
         fresco:roundAsCircle="true"
         fresco:viewAspectRatio="1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_category_label"
+        android:gravity="center_vertical"
+        android:letterSpacing="20dp"
+        android:text="互 动 区"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        app:alignContent="stretch"
+        app:alignItems="stretch"
+        app:flexWrap="wrap">
+
+        <TextView
+            style="@style/Category"
+            android:singleLine="true"
+            android:text="电脑硬件(0)"
+            android:textSize="13sp"
+            app:layout_flexBasisPercent="30%"/>
+
+        <TextView
+            style="@style/Category"
+            android:singleLine="true"
+            android:text="电脑硬件(0)"
+            android:textSize="13sp"
+            app:layout_flexBasisPercent="30%"/>
+
+        <TextView
+            style="@style/Category"
+            android:singleLine="true"
+            android:text="电脑硬件(0)"
+            android:textSize="13sp"
+            app:layout_flexBasisPercent="30%"/>
+
+    </com.google.android.flexbox.FlexboxLayout>
 
     <ListView
         android:id="@+id/category_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:divider="@null"/>
+        android:divider="@null"
+        android:scrollbars="none"/>
 
 </LinearLayout>
