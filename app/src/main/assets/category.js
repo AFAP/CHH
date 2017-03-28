@@ -1,5 +1,13 @@
 [
     {
+        "id": "0",
+        "name": "首 页",
+        "type": "0",
+        "islabel" : true,
+        "childs": [
+        ]
+    },
+    {
         "id": "1",
         "name": "评测",
         "type": "1",

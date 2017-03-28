@@ -7,16 +7,26 @@ public class Category implements Serializable {
     public static final int TYPE_ARTICLE = 1;
     public static final int TYPE_THREAD = 2;
 
-    String id;
-    String name;
-    int type = 1;
-    List<Category> childrens;
 
-    public Category(String id, String name, int type) {
+    private String id;
+    private String name;
+    private int type = 1;
+    private boolean isLabel = false;
+    private List<Category> childrens;
+    private boolean isSelected = false;
+
+
+    public Category(String id, String name, int type, boolean isLabel) {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.isLabel = isLabel;
     }
+
+    public boolean isLabel() {
+        return isLabel;
+    }
+
 
     public String getId() {
         return id;
@@ -48,6 +58,14 @@ public class Category implements Serializable {
 
     public void setChildrens(List<Category> childrens) {
         this.childrens = childrens;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     @Override

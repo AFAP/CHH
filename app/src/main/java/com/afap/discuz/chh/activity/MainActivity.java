@@ -5,24 +5,19 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatTextView;
-import android.view.LayoutInflater;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.afap.discuz.chh.R;
+import com.afap.discuz.chh.adapter.CategoryAdapter;
 import com.afap.discuz.chh.fragment.CategoryListFragment;
 import com.afap.discuz.chh.model.Category;
 import com.afap.utils.ContextUtil;
@@ -44,7 +39,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
     private List<Category> mCategorys;
-    private int mCategoryIndex = 0;
+    private int mCategoryIndex = 1;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -64,7 +59,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initData();
         initLeftMenu();
 
-        mPagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), mCategorys.get(0));
+        mPagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), mCategorys.get(1));
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -96,19 +91,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void initData() {
         mCategorys = new ArrayList<>();
+
         String arrstr = ContextUtil.getStringFromAsset(this, "category.js", null);
         try {
             JSONArray array = new JSONArray(arrstr);
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.optJSONObject(i);
 
-                Category category = new Category(obj.optString("id"), obj.optString("name"), obj.optInt("type"));
+                Category category = new Category(obj.optString("id"), obj.optString("name"), obj.optInt("type"), obj.optBoolean("islabel", false));
                 JSONArray childArr = obj.optJSONArray("childs");
 
                 List<Category> childList = new ArrayList<>();
                 for (int j = 0; j < childArr.length(); j++) {
                     JSONObject child = childArr.optJSONObject(j);
-                    Category c = new Category(child.optString("id"), child.optString("name"), child.optInt("type"));
+                    Category c = new Category(child.optString("id"), child.optString("name"), child.optInt("type"), obj.optBoolean("islabel", false));
                     childList.add(c);
                 }
                 category.setChildrens(childList);
@@ -118,7 +114,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        // TODO 默认显示第一个栏目
+        mCategorys.get(1).setSelected(true);
     }
+
+    CategoryAdapter adapter;
 
     /**
      * 初始化左侧菜单
@@ -142,21 +142,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-
-        ListView mListView = (ListView) findViewById(R.id.category_list);
-        final CategoryAdapter mAdapter = new CategoryAdapter(mCategorys);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public int getSpanSize(int position) {
+                return mCategorys.get(position).isLabel() ? 3 : 1;
+            }
+        });
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(layoutManager);
+        adapter = new CategoryAdapter(this, mCategorys, new CategoryAdapter.OnClickListener() {
+            @Override
+            public void click(int position) {
                 mDrawerLayout.closeDrawers();
+                mCategorys.get(mCategoryIndex).setSelected(false);
                 mCategoryIndex = position;
-                mAdapter.notifyDataSetChanged();
+                mCategorys.get(mCategoryIndex).setSelected(true);
+
+                adapter.notifyDataSetChanged();
 
                 mPagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), mCategorys.get(position));
                 mViewPager.setAdapter(mPagerAdapter);
             }
         });
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -205,74 +214,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         @Override
         public int getCount() {
-            return category.getChildrens().size();
+            return category.getChildrens() == null ? 0 : category.getChildrens().size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             return category.getChildrens().get(position).getName();
-        }
-    }
-
-
-    class CategoryAdapter extends BaseAdapter {
-
-        private List<Category> mData;
-        private LayoutInflater mInflater;
-
-        public CategoryAdapter(List<Category> list) {
-            mData = list;
-        }
-
-
-        @Override
-        public int getCount() {
-            return mData == null ? 0 : mData.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mData.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Category category = mData.get(position);
-
-            ViewHolder mHolder;
-            if (convertView == null) {
-
-                mHolder = new ViewHolder();
-
-                if (mInflater == null) {
-                    mInflater = LayoutInflater.from(parent.getContext());
-                }
-                convertView = mInflater.inflate(R.layout.atom_category, null);
-                mHolder.atom_img = (ImageView) convertView.findViewById(R.id.atom_img);
-                mHolder.atom_name = (AppCompatTextView) convertView.findViewById(R.id.atom_name);
-                convertView.setTag(mHolder);
-            } else {
-                mHolder = (ViewHolder) convertView.getTag();
-            }
-
-            mHolder.atom_name.setText(category.getName());
-            if (position == mCategoryIndex) {
-                mHolder.atom_name.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-            } else {
-                mHolder.atom_name.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.black_1));
-            }
-
-            return convertView;
-        }
-
-        class ViewHolder {
-            ImageView atom_img;
-            AppCompatTextView atom_name;
         }
     }
 
