@@ -1,7 +1,13 @@
 package com.afap.discuz.chh.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.afap.discuz.chh.activity.ArticleActivity;
+import com.afap.discuz.chh.activity.ThreadActivity;
+import com.afap.discuz.chh.adapter.CategoryListAdapter;
 import com.afap.discuz.chh.greendao.CategoryListAtomDao;
 import com.afap.discuz.chh.model.Category;
 import com.afap.discuz.chh.greendao.CategoryListAtom;
@@ -11,6 +17,7 @@ import com.tencent.bugly.crashreport.BuglyLog;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
@@ -32,7 +39,34 @@ public class PortalListFragment extends BaseListFragment {
     }
 
     @Override
-    protected void showHistory() {
+    protected void initAdapter() {
+        mAdapterList = new ArrayList<>();
+        mAdapter = new CategoryListAdapter(mAdapterList);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CategoryListAtom atom = (CategoryListAtom) mAdapterList.get(position);
+                if (mCategory.getType() == Category.TYPE_ARTICLE) {
+                    Intent intent = new Intent(getActivity(), ArticleActivity.class);
+                    intent.putExtra(ArticleActivity.KEY_ATOM, atom);
+
+                    startActivity(intent);
+                } else if (mCategory.getType() == Category.TYPE_THREAD) {
+                    Intent intent = new Intent(getActivity(), ThreadActivity.class);
+                    intent.putExtra(ThreadActivity.KEY_ATOM, atom);
+
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getActivity(), ThreadActivity.class);
+                    intent.putExtra(ThreadActivity.KEY_ATOM, atom);
+
+                    startActivity(intent);
+                }
+
+
+            }
+        });
         // 从缓存中取得已存在列表
         QueryBuilder qb = getAtomDao().queryBuilder();
         qb.where(CategoryListAtomDao.Properties.Cat.eq(mCategory.getId()));
@@ -75,7 +109,7 @@ public class PortalListFragment extends BaseListFragment {
 
                         Document doc = Jsoup.parse(s);
 
-                        List<CategoryListAtom> list = CategoryListAtom.parseFromElements(doc, mCategory.getId());
+                        List<CategoryListAtom> list = CategoryListAtom.parseFromDocument(doc, mCategory.getId());
                         mAdapterList.addAll(list);
 
                         getAtomDao().insertInTx(list);

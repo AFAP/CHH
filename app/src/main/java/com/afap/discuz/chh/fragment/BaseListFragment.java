@@ -33,7 +33,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 
-public class BaseListFragment extends Fragment {
+public class BaseListFragment<T> extends Fragment {
     protected final static String KEY_CATEGORY = "key_category";
 
     protected Category mCategory;
@@ -41,20 +41,11 @@ public class BaseListFragment extends Fragment {
     protected PtrFrameLayout mPtrFrameLayout;
     protected LoadMoreListViewContainer mLoadMoreListViewContainer;
     protected ListView mListView;
-    protected List<CategoryListAtom> mAdapterList;
+    protected List<T> mAdapterList;
     protected CategoryListAdapter mAdapter;
 
 
     protected int currentPageNO = 1;
-
-
-    public static BaseListFragment newInstance(Category category) {
-        Bundle args = new Bundle();
-        args.putSerializable(KEY_CATEGORY, category);
-        BaseListFragment fragment = new BaseListFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public void setCategory(Category category) {
         mCategory = category;
@@ -125,45 +116,19 @@ public class BaseListFragment extends Fragment {
 //                LocalDisplay.dp2px(20)));
 //        mListView.addHeaderView(headerMarginView);
 
-        mAdapterList = new ArrayList<>();
-        mAdapter = new CategoryListAdapter(mAdapterList);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CategoryListAtom atom = mAdapterList.get(position);
-                if (mCategory.getType() == Category.TYPE_ARTICLE) {
-                    Intent intent = new Intent(getActivity(), ArticleActivity.class);
-                    intent.putExtra(ArticleActivity.KEY_ATOM, atom);
+        initAdapter();
 
-                    startActivity(intent);
-                } else if (mCategory.getType() == Category.TYPE_THREAD) {
-                    Intent intent = new Intent(getActivity(), ThreadActivity.class);
-                    intent.putExtra(ThreadActivity.KEY_ATOM, atom);
-
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getActivity(), ThreadActivity.class);
-                    intent.putExtra(ThreadActivity.KEY_ATOM, atom);
-
-                    startActivity(intent);
-                }
-
-
-            }
-        });
-        showHistory();
     }
 
-    public CategoryListAtomDao getAtomDao() {
-        return App.getInstance().getDaoSession().getCategoryListAtomDao();
-    }
-
-    protected void showHistory() {
+    protected void initAdapter() {
     }
 
 
     protected void getList(final int pageNo) {
 
+    }
+
+    protected CategoryListAtomDao getAtomDao() {
+        return App.getInstance().getDaoSession().getCategoryListAtomDao();
     }
 }

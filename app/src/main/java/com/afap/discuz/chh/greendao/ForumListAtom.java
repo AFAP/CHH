@@ -11,27 +11,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 分类列表每行元素
+ * Created by CCL on 2017/3/29.
  */
-public class CategoryListAtom implements Serializable {
+
+public class ForumListAtom implements Serializable {
 
     private String cat;
     private String href;
     private String title;
+    private String belong;
     private String content;
     private String time;
     private String thumb_url;
 
-    public CategoryListAtom() {
+    public ForumListAtom() {
     }
 
-    public CategoryListAtom(String cat, String href, String title, String content, String time, String thumb_url) {
+    public ForumListAtom(String cat, String href, String title, String belong) {
         this.cat = cat;
         this.href = href;
         this.title = title;
-        this.content = content;
-        this.time = time;
-        this.thumb_url = thumb_url;
+        this.belong = belong;
     }
 
     public String getCat() {
@@ -94,31 +94,21 @@ public class CategoryListAtom implements Serializable {
                 '}';
     }
 
-    public static List<CategoryListAtom> parseFromDocument(Document doc, String cat) {
-        List<CategoryListAtom> list = new ArrayList<>();
+    public static List<ForumListAtom> parseFromDocument(Document doc, String cat) {
+        List<ForumListAtom> list = new ArrayList<>();
 
-        Element div_ct = doc.getElementById("ct");
-        Element div_list = div_ct.getElementsByAttributeValue("class", "bm_c xld").get(0);
+        Elements tbodys = doc.getElementsByAttributeValueContaining("id", "normalthread_");
 
-        Elements dls = div_list.children();
-
-        for (int i = 0; i < dls.size(); i++) {
-            Element dl = dls.get(i);
+        for (int i = 0; i < tbodys.size(); i++) {
+            Element tbody = tbodys.get(i);
+            Element th_2 = tbody.child(0);
 
 
-            String href = dl.child(0).getElementsByTag("a").get(0).attr("href");
-            String title = dl.child(0).text();
-            String desc = dl.child(1).text();
-            String time = dl.child(2).text();
+            String belong = th_2.getElementsByTag("em").get(0).text();
+            String title = th_2.getElementsByAttributeValue("class", "s xst").get(0).text();
 
-            String img_url = null;
 
-            Elements imgs = dl.child(1).getElementsByTag("img");
-            if (imgs.size() > 0) {
-                img_url = Constant.HOST_APP + imgs.get(0).attr("src");
-            }
-
-            CategoryListAtom atom = new CategoryListAtom(cat, href, title, desc, time, img_url);
+            ForumListAtom atom = new ForumListAtom(cat, "", title, belong);
             list.add(atom);
         }
         return list;
