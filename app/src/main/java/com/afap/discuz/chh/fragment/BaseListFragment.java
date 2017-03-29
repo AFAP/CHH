@@ -16,19 +16,14 @@ import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.activity.ArticleActivity;
 import com.afap.discuz.chh.activity.ThreadActivity;
 import com.afap.discuz.chh.adapter.CategoryListAdapter;
+import com.afap.discuz.chh.greendao.CategoryListAtom;
 import com.afap.discuz.chh.greendao.CategoryListAtomDao;
 import com.afap.discuz.chh.model.Category;
-import com.afap.discuz.chh.greendao.CategoryListAtom;
-import com.afap.discuz.chh.net.Network;
 import com.tencent.bugly.crashreport.BuglyLog;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.greenrobot.dao.query.QueryBuilder;
 import in.srain.cube.views.loadmore.LoadMoreContainer;
 import in.srain.cube.views.loadmore.LoadMoreHandler;
 import in.srain.cube.views.loadmore.LoadMoreListViewContainer;
@@ -36,35 +31,30 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 
-public class CategoryListFragment extends Fragment {
-    private final static int PAGE_SIZE = 15;
-    private final static String KEY_CATEGORY = "key_category";
+public class BaseListFragment extends Fragment {
+    protected final static String KEY_CATEGORY = "key_category";
 
-    private Category mCategory;
+    protected Category mCategory;
 
-    public static CategoryListFragment newInstance(Category category) {
+    protected PtrFrameLayout mPtrFrameLayout;
+    protected LoadMoreListViewContainer mLoadMoreListViewContainer;
+    protected ListView mListView;
+    protected List<CategoryListAtom> mAdapterList;
+    protected CategoryListAdapter mAdapter;
+
+
+    protected int currentPageNO = 1;
+
+
+    public static BaseListFragment newInstance(Category category) {
         Bundle args = new Bundle();
         args.putSerializable(KEY_CATEGORY, category);
-        System.out.println("111111" + category);
-        CategoryListFragment fragment = new CategoryListFragment();
+        BaseListFragment fragment = new BaseListFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
-
-    private PtrFrameLayout mPtrFrameLayout;
-    private LoadMoreListViewContainer mLoadMoreListViewContainer;
-    private ListView mListView;
-    private List<CategoryListAtom> mAdapterList;
-    private CategoryListAdapter mAdapter;
-
-
-    private int currentPageNO = 1;
 
     public void setCategory(Category category) {
         mCategory = category;
@@ -85,8 +75,8 @@ public class CategoryListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        BuglyLog.d("CategoryListFragment", "----onActivityCreated----");
-        BuglyLog.d("CategoryListFragment", mCategory.toString());
+        BuglyLog.v("BaseListFragment", "----onActivityCreated----");
+        BuglyLog.v("BaseListFragment", mCategory.toString());
         // header
         StoreHouseHeader header = new StoreHouseHeader(getContext());
         header.setPadding(0, 10, 0, 10);
@@ -136,7 +126,7 @@ public class CategoryListFragment extends Fragment {
 //        mListView.addHeaderView(headerMarginView);
 
         mAdapterList = new ArrayList<>();
-        mAdapter = new CategoryListAdapter( mAdapterList);
+        mAdapter = new CategoryListAdapter(mAdapterList);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -162,83 +152,18 @@ public class CategoryListFragment extends Fragment {
 
             }
         });
-        // 从缓存中取得已存在列表
-        QueryBuilder qb = getAtomDao().queryBuilder();
-        qb.where(CategoryListAtomDao.Properties.Cat.eq(mCategory.getId()));
-        List<CategoryListAtom> list = qb.list();
-        if (list.size() > 0) {
-            mAdapterList.addAll(list);
-
-            mAdapter.notifyDataSetChanged();
-        } else {
-            //设置延时自动刷新数据
-            mPtrFrameLayout.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mPtrFrameLayout.autoRefresh(false);
-                }
-            }, 200);
-        }
+        showHistory();
     }
 
     public CategoryListAtomDao getAtomDao() {
         return App.getInstance().getDaoSession().getCategoryListAtomDao();
     }
 
-    private void getList(final int pageNo) {
-        Network
-                .getAPIService()
-                .getList(mCategory.getId(), pageNo)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onNext(String s) {
-                        currentPageNO = pageNo;
-                        if (currentPageNO == 1) {
-                            mAdapterList.clear();
-
-                            // 清除所有数据
-                            QueryBuilder qb = getAtomDao().queryBuilder();
-                            qb.where(CategoryListAtomDao.Properties.Cat.eq(mCategory.getId()))
-                                    .buildDelete().executeDeleteWithoutDetachingEntities();
-                        }
+    protected void showHistory() {
+    }
 
 
-                        Document doc = Jsoup.parse(s);
+    protected void getList(final int pageNo) {
 
-                        List<CategoryListAtom> list = CategoryListAtom.parseFromElements(doc, mCategory.getId());
-                        mAdapterList.addAll(list);
-
-                        getAtomDao().insertInTx(list);
-
-                        mAdapter.notifyDataSetChanged();
-
-                        mPtrFrameLayout.refreshComplete();
-                        //第一个参数是：数据是否为空；第二个参数是：是否还有更多数据
-                        mLoadMoreListViewContainer.loadMoreFinish(list.isEmpty(), list.size() == PAGE_SIZE);
-
-                        for (CategoryListAtom atom : list) {
-                            BuglyLog.w("aaaa", atom.toString());
-                        }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        BuglyLog.i("onCompleted", "----onCompleted----");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-
-                        if (pageNo == 1) {
-                            mPtrFrameLayout.refreshComplete();
-                        } else {
-                            mLoadMoreListViewContainer.loadMoreError(1, "加载失败，请重试");
-                        }
-
-                    }
-                });
     }
 }

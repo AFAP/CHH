@@ -459,5 +459,19 @@
         "name": "活宠",
         "type": "2",
         "childs": []
-    }
+    },
+    {
+        "id": "0",
+        "name": "分 享 区",
+        "type": "0",
+        "islabel" : true,
+        "childs": [
+        ]
+    },
+     {
+         "id": "53",
+         "name": "电脑硬件",
+         "type": "3",
+         "childs": []
+     }
 ]

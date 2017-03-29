@@ -20,10 +20,8 @@ public interface APIService {
 
 
     /**
-     * 获取最新版本号
+     * 获取门户列表
      */
-//    @GET("portal.php?mod=list&catid={catid}&pege={page}")
-//    Observable<String> getList(@Path("catid") String catid, @Path("page") int page);
     @FormUrlEncoded
     @POST("portal.php?mod=list")
     Observable<String> getList(
@@ -45,6 +43,11 @@ public interface APIService {
             @Field("page") int page
     );
 
+    /**
+     * 获取论坛列表
+     */
+    @GET("forum-{id}-{page}.html")
+    Observable<String> getForumList(@Path("id") String articlehref, @Path("page") int page);
 
 //    @FormUrlEncoded
 //    @POST("api.php?act=act_register")

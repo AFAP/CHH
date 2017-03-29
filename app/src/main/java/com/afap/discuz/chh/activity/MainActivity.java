@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,7 +19,9 @@ import android.view.ViewGroup;
 
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.adapter.CategoryAdapter;
-import com.afap.discuz.chh.fragment.CategoryListFragment;
+import com.afap.discuz.chh.fragment.BaseListFragment;
+import com.afap.discuz.chh.fragment.PortalListFragment;
+import com.afap.discuz.chh.fragment.ForumListFragment;
 import com.afap.discuz.chh.model.Category;
 import com.afap.utils.ContextUtil;
 import com.tencent.bugly.crashreport.BuglyLog;
@@ -28,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
@@ -109,7 +113,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 category.setChildrens(childList);
                 mCategorys.add(category);
-
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -155,6 +158,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void click(int position) {
                 mDrawerLayout.closeDrawers();
+                // 重复点击过滤掉不处理
+                if (mCategoryIndex == position) {
+                    return;
+                }
                 mCategorys.get(mCategoryIndex).setSelected(false);
                 mCategoryIndex = position;
                 mCategorys.get(mCategoryIndex).setSelected(true);
@@ -163,6 +170,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 mPagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), mCategorys.get(position));
                 mViewPager.setAdapter(mPagerAdapter);
+                // 如果没有子分类，没有必要显示TabLayout
+                if (mCategorys.get(position).getChildrens().size() > 0) {
+                    mTabLayout.setVisibility(View.VISIBLE);
+                } else {
+                    mTabLayout.setVisibility(View.GONE);
+                }
             }
         });
         mRecyclerView.setAdapter(adapter);
@@ -192,34 +205,53 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    private List<Fragment> fragments = new ArrayList<>();
+    // 注意有不少栏目没有子节点，需要判断
     class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
+
         private Category category;
 
         public SimpleFragmentPagerAdapter(FragmentManager fm, Category category) {
             super(fm);
+            FragmentTransaction ft = fm.beginTransaction();
+            for (int i = 0; i <fragments.size() ; i++) {
+                ft.remove(fragments.get(i));
+            }
+
+            ft.commitNowAllowingStateLoss();
+            fragments.clear();
             this.category = category;
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            CategoryListFragment fragment = (CategoryListFragment) super.instantiateItem(container, position);
-            fragment.setCategory(category.getChildrens().get(position));
+            BaseListFragment fragment = (BaseListFragment) super.instantiateItem(container, position);
+            fragment.setCategory(category.getChildrens().size() == 0 ? category : category.getChildrens().get(position));
             return fragment;
+
         }
 
         @Override
         public Fragment getItem(int position) {
-            return CategoryListFragment.newInstance(category.getChildrens().get(position));
+            Category c = category.getChildrens().size() == 0 ? category : category.getChildrens().get(position);
+            Fragment fragment;
+            if (c.getType() == Category.TYPE_FORUM) {
+                fragment = ForumListFragment.newInstance(c);
+            } else {
+                fragment = PortalListFragment.newInstance(c);
+            }
+            fragments.add(fragment);
+            return fragment;
         }
 
         @Override
         public int getCount() {
-            return category.getChildrens() == null ? 0 : category.getChildrens().size();
+            return category.getChildrens().size() == 0 ? 1 : category.getChildrens().size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return category.getChildrens().get(position).getName();
+            return category.getChildrens().size() == 0 ? category.getName() : category.getChildrens().get(position).getName();
         }
     }
 

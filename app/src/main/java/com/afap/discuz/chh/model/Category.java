@@ -1,18 +1,20 @@
 package com.afap.discuz.chh.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Category implements Serializable {
     public static final int TYPE_ARTICLE = 1;
     public static final int TYPE_THREAD = 2;
+    public static final int TYPE_FORUM = 3;
 
 
     private String id;
     private String name;
     private int type = 1;
     private boolean isLabel = false;
-    private List<Category> childrens;
+    private List<Category> childrens = new ArrayList<>();
     private boolean isSelected = false;
 
 
