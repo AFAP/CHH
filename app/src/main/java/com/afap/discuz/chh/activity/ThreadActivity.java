@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
-import com.afap.discuz.chh.greendao.CategoryListAtom;
+import com.afap.discuz.chh.greendao.BaseListAtom;
 import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.discuz.chh.widget.loading.LoadingState;
@@ -28,16 +28,14 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class ThreadActivity extends BaseActivity implements View.OnClickListener {
 
     public final static String KEY_ATOM = "key_href";
-//    private final static String PRE_HREF = "article-";
 
-    private CategoryListAtom mAtom;
+    private BaseListAtom mAtom;
     private WebView mWebView;
     private LoadingView mLoadingView;
 
@@ -48,7 +46,7 @@ public class ThreadActivity extends BaseActivity implements View.OnClickListener
 
         setToolbarTitle("详细信息");
 
-        mAtom = (CategoryListAtom) getIntent().getSerializableExtra(KEY_ATOM);
+        mAtom = (BaseListAtom) getIntent().getSerializableExtra(KEY_ATOM);
 
 
         TextView louzhu_title = (TextView) findViewById(R.id.louzhu_title);

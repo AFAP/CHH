@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.adapter.ThreadFloorAdapter;
-import com.afap.discuz.chh.greendao.CategoryListAtom;
+import com.afap.discuz.chh.greendao.BaseListAtom;
 import com.afap.discuz.chh.model.ThreadFloor;
 import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
@@ -43,7 +43,7 @@ public class ThreadFloorActivity extends BaseActivity {
 
     private final static int PAGE_SIZE = 30;
 
-    private CategoryListAtom mAtom;
+    private BaseListAtom mAtom;
 
     private PtrFrameLayout mPtrFrameLayout;
     private LoadMoreListViewContainer mLoadMoreListViewContainer;
@@ -60,7 +60,7 @@ public class ThreadFloorActivity extends BaseActivity {
         setContentView(R.layout.activity_article_comment);
 
         setToolbarTitle(R.string.app_name);
-        mAtom = (CategoryListAtom) getIntent().getSerializableExtra(ThreadActivity.KEY_ATOM);
+        mAtom = (BaseListAtom) getIntent().getSerializableExtra(ThreadActivity.KEY_ATOM);
 
         // header
         StoreHouseHeader header = new StoreHouseHeader(this);

@@ -1,9 +1,11 @@
 package com.afap.discuz.chh.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.afap.discuz.chh.activity.ThreadActivity;
 import com.afap.discuz.chh.adapter.ForumListAdapter;
 import com.afap.discuz.chh.greendao.ForumListAtom;
 import com.afap.discuz.chh.model.Category;
@@ -43,8 +45,13 @@ public class ForumListFragment extends BaseListFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ForumListAtom atom = mAdapterList.get(position);
+                if (mCategory.getType() == Category.TYPE_FORUM) {
+                    Intent intent = new Intent(getActivity(), ThreadActivity.class);
+                    intent.putExtra(ThreadActivity.KEY_ATOM, atom);
 
-
+                    startActivity(intent);
+                }
             }
         });
         //设置延时自动刷新数据

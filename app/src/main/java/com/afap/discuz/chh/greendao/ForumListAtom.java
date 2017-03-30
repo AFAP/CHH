@@ -10,11 +10,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForumListAtom implements Serializable {
+public class ForumListAtom extends BaseListAtom implements Serializable {
 
     private String cat;
-    private String href;
-    private String title;
     private String belong;
     private String author_name;
     private String author_id;
@@ -22,7 +20,8 @@ public class ForumListAtom implements Serializable {
     private String num_view;
     private String num_comment;
 
-    public ForumListAtom(String cat, String href, String title, String belong, String author_name, String author_id, String time, String num_view, String num_comment) {
+    public ForumListAtom(String cat, String href, String title, String belong, String author_name, String author_id,
+                         String time, String num_view, String num_comment) {
         this.cat = cat;
         this.href = href;
         this.title = title;
@@ -40,22 +39,6 @@ public class ForumListAtom implements Serializable {
 
     public void setCat(String cat) {
         this.cat = cat;
-    }
-
-    public String getHref() {
-        return href;
-    }
-
-    public void setHref(String href) {
-        this.href = href;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getBelong() {
@@ -156,6 +139,7 @@ public class ForumListAtom implements Serializable {
 
             String belong = th_2.getElementsByTag("em").get(0).text();
             String title = th_2.getElementsByAttributeValue("class", "s xst").get(0).text();
+            String href = th_2.getElementsByAttributeValue("class", "s xst").get(0).attr("href");
 
             String author_name = td_3.getElementsByTag("a").get(0).text();
             String author_id = td_3.getElementsByTag("a").get(0).attr("href");
@@ -166,7 +150,8 @@ public class ForumListAtom implements Serializable {
             String num_view = td_4.getElementsByTag("em").get(0).text();
 
 
-            ForumListAtom atom = new ForumListAtom(cat, "", title, belong, author_name, author_id, time, num_comment, num_view);
+            ForumListAtom atom = new ForumListAtom(cat, href, title, belong, author_name, author_id, time, num_comment,
+                    num_view);
             list.add(atom);
         }
         return list;

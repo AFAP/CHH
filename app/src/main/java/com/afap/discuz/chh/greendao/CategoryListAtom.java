@@ -13,11 +13,9 @@ import java.util.List;
 /**
  * 分类列表每行元素
  */
-public class CategoryListAtom implements Serializable {
+public class CategoryListAtom extends BaseListAtom implements Serializable {
 
     private String cat;
-    private String href;
-    private String title;
     private String content;
     private String time;
     private String thumb_url;
@@ -40,22 +38,6 @@ public class CategoryListAtom implements Serializable {
 
     public void setCat(String cat) {
         this.cat = cat;
-    }
-
-    public String getHref() {
-        return href;
-    }
-
-    public void setHref(String href) {
-        this.href = href;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContent() {
