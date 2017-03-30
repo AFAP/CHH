@@ -3,6 +3,7 @@ package com.afap.discuz.chh.adapter;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,11 @@ public class CategoryAdapter extends RecyclerView.Adapter {
             ((CategoryLabelViewHolder) holder).tv_label.setText(mData.get(position).getName());
         } else if (holder instanceof CategoryColumnViewHolder) {
             TextView tv_column = ((CategoryColumnViewHolder) holder).tv_column;
-            tv_column.setText(mData.get(position).getName());
+            String title = mData.get(position).getName();
+            if (!TextUtils.isEmpty(mData.get(position).getNum())) {
+                title = title + "(" + mData.get(position).getNum() + ")";
+            }
+            tv_column.setText(title);
             tv_column.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -71,7 +76,6 @@ public class CategoryAdapter extends RecyclerView.Adapter {
                 tv_column.setBackgroundResource(R.drawable.bg_category_normal);
                 tv_column.setTextColor(ContextCompat.getColor(mContext, R.color.black_1));
             }
-
         }
     }
 

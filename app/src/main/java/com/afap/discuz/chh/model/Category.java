@@ -16,6 +16,7 @@ public class Category implements Serializable {
     private boolean isLabel = false;
     private List<Category> childrens = new ArrayList<>();
     private boolean isSelected = false;
+    private String num;
 
 
     public Category(String id, String name, int type, boolean isLabel) {
@@ -68,6 +69,14 @@ public class Category implements Serializable {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
     }
 
     @Override

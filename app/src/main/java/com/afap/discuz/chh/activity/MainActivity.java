@@ -12,23 +12,34 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.adapter.CategoryAdapter;
 import com.afap.discuz.chh.fragment.BaseListFragment;
 import com.afap.discuz.chh.fragment.PortalListFragment;
 import com.afap.discuz.chh.fragment.ForumListFragment;
 import com.afap.discuz.chh.model.Category;
+import com.afap.discuz.chh.net.BaseSubscriber;
+import com.afap.discuz.chh.net.Network;
+import com.afap.discuz.chh.widget.loading.LoadingState;
 import com.afap.utils.ContextUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.tencent.bugly.crashreport.BuglyLog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -38,6 +49,8 @@ import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType;
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultSubscriber;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -69,6 +82,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+        getForumNum();
     }
 
     @Override
@@ -102,13 +117,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.optJSONObject(i);
 
-                Category category = new Category(obj.optString("id"), obj.optString("name"), obj.optInt("type"), obj.optBoolean("islabel", false));
+                Category category = new Category(obj.optString("id"), obj.optString("name"), obj.optInt("type"), obj
+                        .optBoolean("islabel", false));
                 JSONArray childArr = obj.optJSONArray("childs");
 
                 List<Category> childList = new ArrayList<>();
                 for (int j = 0; j < childArr.length(); j++) {
                     JSONObject child = childArr.optJSONObject(j);
-                    Category c = new Category(child.optString("id"), child.optString("name"), child.optInt("type"), obj.optBoolean("islabel", false));
+                    Category c = new Category(child.optString("id"), child.optString("name"), child.optInt("type"),
+                            obj.optBoolean("islabel", false));
                     childList.add(c);
                 }
                 category.setChildrens(childList);
@@ -205,7 +222,55 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+
+    /**
+     * 获取论坛各个栏目的今日帖子数量
+     */
+    private void getForumNum() {
+        Network
+                .getAPIService()
+                .getForumMain()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseSubscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        Document doc = Jsoup.parse(s);
+
+                        Elements tds = doc.getElementsByAttributeValue("class", "fl_g");
+                        for (int i = 0; i < tds.size(); i++) {
+                            Element dt = tds.get(i).child(1).child(0);
+                            if (dt.childNodeSize() == 2) {
+                                String href = dt.child(0).attr("href");
+                                String id = href.replaceAll("forum-", "").replaceAll("-1.html", "");
+                                String num = dt.child(1).text().replaceAll("\\(", "").replaceAll("\\)", "").trim();
+
+                                BuglyLog.v("MAIN", "id=" + id + ",num=" + num);
+                                for (int j = 0; j < mCategorys.size(); j++) {
+                                    if (mCategorys.get(j).getType() == Category.TYPE_FORUM && TextUtils.equals(id,
+                                            mCategorys.get(j).getId())) {
+                                        mCategorys.get(j).setNum(num);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // 后台刷新，错误不处理
+                    }
+                });
+
+
+    }
+
+
     private List<Fragment> fragments = new ArrayList<>();
+
     // 注意有不少栏目没有子节点，需要判断
     class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -214,7 +279,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         public SimpleFragmentPagerAdapter(FragmentManager fm, Category category) {
             super(fm);
             FragmentTransaction ft = fm.beginTransaction();
-            for (int i = 0; i <fragments.size() ; i++) {
+            for (int i = 0; i < fragments.size(); i++) {
                 ft.remove(fragments.get(i));
             }
 
@@ -226,7 +291,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             BaseListFragment fragment = (BaseListFragment) super.instantiateItem(container, position);
-            fragment.setCategory(category.getChildrens().size() == 0 ? category : category.getChildrens().get(position));
+            fragment.setCategory(category.getChildrens().size() == 0 ? category : category.getChildrens().get
+                    (position));
             return fragment;
 
         }
@@ -251,7 +317,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return category.getChildrens().size() == 0 ? category.getName() : category.getChildrens().get(position).getName();
+            return category.getChildrens().size() == 0 ? category.getName() : category.getChildrens().get(position)
+                    .getName();
         }
     }
 

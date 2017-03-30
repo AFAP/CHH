@@ -43,6 +43,10 @@ public interface APIService {
             @Field("page") int page
     );
 
+
+    @GET("forum.php")
+    Observable<String> getForumMain();
+
     /**
      * 获取论坛列表
      */
