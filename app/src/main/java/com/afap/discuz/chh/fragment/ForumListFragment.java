@@ -1,18 +1,10 @@
 package com.afap.discuz.chh.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.afap.discuz.chh.R;
-import com.afap.discuz.chh.activity.ArticleActivity;
-import com.afap.discuz.chh.activity.ThreadActivity;
-import com.afap.discuz.chh.adapter.CategoryListAdapter;
-import com.afap.discuz.chh.greendao.CategoryListAtom;
+import com.afap.discuz.chh.adapter.ForumListAdapter;
 import com.afap.discuz.chh.greendao.ForumListAtom;
 import com.afap.discuz.chh.model.Category;
 import com.afap.discuz.chh.net.Network;
@@ -24,13 +16,6 @@ import org.jsoup.nodes.Document;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.srain.cube.views.loadmore.LoadMoreContainer;
-import in.srain.cube.views.loadmore.LoadMoreHandler;
-import in.srain.cube.views.loadmore.LoadMoreListViewContainer;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
-import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -38,6 +23,9 @@ import rx.schedulers.Schedulers;
 
 public class ForumListFragment extends BaseListFragment {
     private final static int PAGE_SIZE = 15;
+
+    private List<ForumListAtom> mAdapterList;
+    private ForumListAdapter mAdapter;
 
     public static ForumListFragment newInstance(Category category) {
         Bundle args = new Bundle();
@@ -50,7 +38,7 @@ public class ForumListFragment extends BaseListFragment {
     @Override
     protected void initAdapter() {
         mAdapterList = new ArrayList<>();
-        mAdapter = new CategoryListAdapter(mAdapterList);
+        mAdapter = new ForumListAdapter(mAdapterList);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,13 +75,13 @@ public class ForumListFragment extends BaseListFragment {
                         Document doc = Jsoup.parse(s);
 
                         List<ForumListAtom> list = ForumListAtom.parseFromDocument(doc, mCategory.getId());
-//                        mAdapterList.addAll(list);
-//
-//                        mAdapter.notifyDataSetChanged();
-//
-//                        mPtrFrameLayout.refreshComplete();
-//                        //第一个参数是：数据是否为空；第二个参数是：是否还有更多数据
-//                        mLoadMoreListViewContainer.loadMoreFinish(list.isEmpty(), list.size() == PAGE_SIZE);
+                        mAdapterList.addAll(list);
+
+                        mAdapter.notifyDataSetChanged();
+
+                        mPtrFrameLayout.refreshComplete();
+                        //第一个参数是：数据是否为空；第二个参数是：是否还有更多数据
+                        mLoadMoreListViewContainer.loadMoreFinish(list.isEmpty(), list.size() == PAGE_SIZE);
 
                         for (ForumListAtom atom : list) {
                             BuglyLog.w("aaaa", atom.toString());

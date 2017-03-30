@@ -1,6 +1,5 @@
 package com.afap.discuz.chh.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,21 +7,13 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.afap.discuz.chh.App;
 import com.afap.discuz.chh.R;
-import com.afap.discuz.chh.activity.ArticleActivity;
-import com.afap.discuz.chh.activity.ThreadActivity;
-import com.afap.discuz.chh.adapter.CategoryListAdapter;
-import com.afap.discuz.chh.greendao.CategoryListAtom;
 import com.afap.discuz.chh.greendao.CategoryListAtomDao;
 import com.afap.discuz.chh.model.Category;
 import com.tencent.bugly.crashreport.BuglyLog;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import in.srain.cube.views.loadmore.LoadMoreContainer;
 import in.srain.cube.views.loadmore.LoadMoreHandler;
@@ -33,7 +24,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 
-public class BaseListFragment<T> extends Fragment {
+public class BaseListFragment extends Fragment {
     protected final static String KEY_CATEGORY = "key_category";
 
     protected Category mCategory;
@@ -41,8 +32,6 @@ public class BaseListFragment<T> extends Fragment {
     protected PtrFrameLayout mPtrFrameLayout;
     protected LoadMoreListViewContainer mLoadMoreListViewContainer;
     protected ListView mListView;
-    protected List<T> mAdapterList;
-    protected CategoryListAdapter mAdapter;
 
 
     protected int currentPageNO = 1;

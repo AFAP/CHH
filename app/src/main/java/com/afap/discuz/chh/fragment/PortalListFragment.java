@@ -29,6 +29,8 @@ import rx.schedulers.Schedulers;
 public class PortalListFragment extends BaseListFragment {
     private final static int PAGE_SIZE = 15;
 
+    private List<CategoryListAtom> mAdapterList;
+    private CategoryListAdapter mAdapter;
 
     public static PortalListFragment newInstance(Category category) {
         Bundle args = new Bundle();
@@ -46,7 +48,7 @@ public class PortalListFragment extends BaseListFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CategoryListAtom atom = (CategoryListAtom) mAdapterList.get(position);
+                CategoryListAtom atom = mAdapterList.get(position);
                 if (mCategory.getType() == Category.TYPE_ARTICLE) {
                     Intent intent = new Intent(getActivity(), ArticleActivity.class);
                     intent.putExtra(ArticleActivity.KEY_ATOM, atom);
