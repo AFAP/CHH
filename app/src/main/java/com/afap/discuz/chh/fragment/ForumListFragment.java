@@ -9,22 +9,22 @@ import com.afap.discuz.chh.activity.ThreadActivity;
 import com.afap.discuz.chh.adapter.ForumListAdapter;
 import com.afap.discuz.chh.greendao.ForumListAtom;
 import com.afap.discuz.chh.model.Category;
+import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
-import com.tencent.bugly.crashreport.BuglyLog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
 public class ForumListFragment extends BaseListFragment {
-    private final static int PAGE_SIZE = 15;
+    private int total_num = 0;
 
     private List<ForumListAtom> mAdapterList;
     private ForumListAdapter mAdapter;
@@ -70,7 +70,7 @@ public class ForumListFragment extends BaseListFragment {
                 .getForumList(mCategory.getId(), pageNo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new BaseSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         currentPageNO = pageNo;
@@ -86,18 +86,21 @@ public class ForumListFragment extends BaseListFragment {
 
                         mAdapter.notifyDataSetChanged();
 
+                        if (total_num == 0) {
+                            try {
+
+                                Element sp = doc.getElementById("fd_page_bottom");
+                                String totalPageSTr = sp.getElementsByAttributeValueContaining("title", "共").text();
+                                totalPageSTr = totalPageSTr.replaceAll("页", "").replaceAll("/", "").trim();
+                                total_num = Integer.parseInt(totalPageSTr);
+                            } catch (Exception e) {
+                                total_num = 1;
+                            }
+                        }
+
                         mPtrFrameLayout.refreshComplete();
                         //第一个参数是：数据是否为空；第二个参数是：是否还有更多数据
-                        mLoadMoreListViewContainer.loadMoreFinish(list.isEmpty(), list.size() == PAGE_SIZE);
-
-                        for (ForumListAtom atom : list) {
-                            BuglyLog.w("aaaa", atom.toString());
-                        }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        BuglyLog.i("onCompleted", "----onCompleted----");
+                        mLoadMoreListViewContainer.loadMoreFinish(list.isEmpty(), currentPageNO < total_num);
                     }
 
                     @Override
@@ -109,7 +112,6 @@ public class ForumListFragment extends BaseListFragment {
                         } else {
                             mLoadMoreListViewContainer.loadMoreError(1, "加载失败，请重试");
                         }
-
                     }
                 });
     }

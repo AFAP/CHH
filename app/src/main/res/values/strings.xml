@@ -37,7 +37,7 @@
         4.如有侵权，请联系：&#160;afap@foxmail.com
     </string>
     <string name="tip_pic_saved_format">图片已保存至文件夹:%S</string>
-
+    <string name="tip_exit">再按一次将退出应用</string>
 
 
 </resources>

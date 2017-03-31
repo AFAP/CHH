@@ -11,8 +11,8 @@ import com.afap.discuz.chh.adapter.CategoryListAdapter;
 import com.afap.discuz.chh.greendao.CategoryListAtomDao;
 import com.afap.discuz.chh.model.Category;
 import com.afap.discuz.chh.greendao.CategoryListAtom;
+import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
-import com.tencent.bugly.crashreport.BuglyLog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -95,7 +94,7 @@ public class PortalListFragment extends BaseListFragment {
                 .getList(mCategory.getId(), pageNo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new BaseSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         currentPageNO = pageNo;
@@ -121,11 +120,6 @@ public class PortalListFragment extends BaseListFragment {
                         mPtrFrameLayout.refreshComplete();
                         //第一个参数是：数据是否为空；第二个参数是：是否还有更多数据
                         mLoadMoreListViewContainer.loadMoreFinish(list.isEmpty(), list.size() == PAGE_SIZE);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        BuglyLog.i("onCompleted", "----onCompleted----");
                     }
 
                     @Override

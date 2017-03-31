@@ -137,7 +137,8 @@ public class ForumListAtom extends BaseListAtom implements Serializable {
             Element td_3 = tr.child(2);
             Element td_4 = tr.child(3);
 
-            String belong = th_2.getElementsByTag("em").get(0).text();
+            // 这个暂时不显示，且有的没有分组会异常
+            // String belong = th_2.getElementsByTag("em").get(0).text();
             String title = th_2.getElementsByAttributeValue("class", "s xst").get(0).text();
             String href = th_2.getElementsByAttributeValue("class", "s xst").get(0).attr("href");
 
@@ -149,8 +150,7 @@ public class ForumListAtom extends BaseListAtom implements Serializable {
             String num_comment = td_4.getElementsByTag("a").get(0).text();
             String num_view = td_4.getElementsByTag("em").get(0).text();
 
-
-            ForumListAtom atom = new ForumListAtom(cat, href, title, belong, author_name, author_id, time, num_comment,
+            ForumListAtom atom = new ForumListAtom(cat, href, title, "", author_name, author_id, time, num_comment,
                     num_view);
             list.add(atom);
         }

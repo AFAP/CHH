@@ -462,100 +462,410 @@
     },
     {
         "id": "0",
+        "name": "互 动 区",
+        "type": "0",
+        "islabel": true,
+        "childs": []
+    },
+    {
+        "id": "257",
+        "name": "勋章申请区",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "290",
+        "name": "CHH第三届机王争霸赛",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "283",
+        "name": "大恶魔的Blog",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "0",
         "name": "分 享 区",
         "type": "0",
-        "islabel" : true,
-        "childs": [
-        ]
+        "islabel": true,
+        "childs": []
     },
-     {
-         "id": "53",
-         "name": "电脑硬件",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "297",
-         "name": "掌设笔电",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "298",
-         "name": "影像器材",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "62",
-         "name": "摄影作品",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "175",
-         "name": "汽车摩托",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "170",
-         "name": "公路山地",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "166",
-         "name": "模型手办",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "65",
-         "name": "败家不息",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "266",
-         "name": "服饰鞋包",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "288",
-         "name": "腕表光阴",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "242",
-         "name": "视听发烧",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "233",
-         "name": "美食饕餮",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "107",
-         "name": "品质家居",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "252",
-         "name": "花鸟鱼虫",
-         "type": "3",
-         "childs": []
-     },
-     {
-         "id": "229",
-         "name": "育儿分享",
-         "type": "3",
-         "childs": []
-     }
+    {
+        "id": "53",
+        "name": "电脑硬件",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "297",
+        "name": "掌设笔电",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "298",
+        "name": "影像器材",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "62",
+        "name": "摄影作品",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "175",
+        "name": "汽车摩托",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "170",
+        "name": "公路山地",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "166",
+        "name": "模型手办",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "65",
+        "name": "败家不息",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "266",
+        "name": "服饰鞋包",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "288",
+        "name": "腕表光阴",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "242",
+        "name": "视听发烧",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "233",
+        "name": "美食饕餮",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "107",
+        "name": "品质家居",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "252",
+        "name": "花鸟鱼虫",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "229",
+        "name": "育儿分享",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "0",
+        "name": "讨 论 区",
+        "type": "0",
+        "islabel": true,
+        "childs": []
+    },
+    {
+        "id": "80",
+        "name": "新闻发布",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "36",
+        "name": "电脑讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "21",
+        "name": "ROG专区",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "188",
+        "name": "掌设讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "102",
+        "name": "摄影讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "176",
+        "name": "汽车讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "93",
+        "name": "单车讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "183",
+        "name": "模型讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "243",
+        "name": "败家讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "239",
+        "name": "视听讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "241",
+        "name": "美食讨论",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "0",
+        "name": "生 活 区",
+        "type": "0",
+        "islabel": true,
+        "childs": []
+    },
+    {
+        "id": "213",
+        "name": "ACG",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "145",
+        "name": "Chh周边",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "0",
+        "name": "CHH Auto Club",
+        "type": "0",
+        "islabel": true,
+        "childs": []
+    },
+    {
+        "id": "286",
+        "name": "上海总店",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "294",
+        "name": "沈阳加盟店",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "295",
+        "name": "深圳加盟店",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "300",
+        "name": "上海松江加盟店",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "301",
+        "name": "杭州加盟店",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "302",
+        "name": "南昌加盟店",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "0",
+        "name": "交 易 区",
+        "type": "0",
+        "islabel": true,
+        "childs": []
+    },
+    {
+        "id": "194",
+        "name": "Watch",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "191",
+        "name": "2平米智慧学习桌",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "73",
+        "name": "牛爸家居",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "87",
+        "name": "ASUS",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "158",
+        "name": "ROG",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "86",
+        "name": "SilverStone",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "90",
+        "name": "Noctua",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "91",
+        "name": "Thermalright",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "232",
+        "name": "Bykski",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "146",
+        "name": "Corsair",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "184",
+        "name": "Bitspower",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "192",
+        "name": "Ergomax人体工学椅",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "196",
+        "name": "GALAX",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "204",
+        "name": "MSI",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "205",
+        "name": "EIZO/NEC",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "227",
+        "name": "PC HIFI",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "235",
+        "name": "达宝利人体工学家居",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "250",
+        "name": "Rimowa",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "258",
+        "name": "Phanteks",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "271",
+        "name": "IN WIN",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "284",
+        "name": "Alienware",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "92",
+        "name": "品牌商家监控区",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "22",
+        "name": "建议意见及投诉",
+        "type": "3",
+        "childs": []
+    },
+    {
+        "id": "99",
+        "name": "活动区归档",
+        "type": "3",
+        "childs": []
+    }
 ]

@@ -30,6 +30,7 @@ import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.discuz.chh.widget.loading.LoadingState;
 import com.afap.utils.ContextUtil;
+import com.afap.utils.ToastUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.tencent.bugly.crashreport.BuglyLog;
 
@@ -107,6 +108,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 连续按两次返回键就退出
+     */
+    private long firstTime = 0;
+
+    @Override
+    public void onBackPressed() {
+
+        if (System.currentTimeMillis() - firstTime < 2000) {
+            this.finish();
+        } else {
+            firstTime = System.currentTimeMillis();
+            ToastUtil.showShort(this, R.string.tip_exit);
+        }
+    }
 
     private void initData() {
         mCategorys = new ArrayList<>();
@@ -238,6 +254,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         Document doc = Jsoup.parse(s);
 
                         Elements tds = doc.getElementsByAttributeValue("class", "fl_g");
+
+
                         for (int i = 0; i < tds.size(); i++) {
                             Element dt = tds.get(i).child(1).child(0);
                             if (dt.childNodeSize() == 2) {
@@ -255,8 +273,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 }
                             }
                         }
-                        adapter.notifyDataSetChanged();
+//                        // 动态获取菜单
+//                        JSONArray array = new JSONArray();
+//                        for (int i = 0; i < tds.size(); i++) {
+//                            Element dt = tds.get(i).child(1).child(0);
+//                            if (dt.childNodeSize() == 2) {
+//                                String href = dt.child(0).attr("href");
+//                                String id = href.replaceAll("forum-", "").replaceAll("-1.html", "");
+//                                String name = dt.child(0).text();
+//                                JSONObject object = new JSONObject();
+//                                try {
+//                                    object.put("id", id);
+//                                    object.put("name", name);
+//                                    object.put("type", "3");
+//                                    object.put("childs", new JSONArray());
+//                                    array.put(object);
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }
+//                        BuglyLog.v("MAIN", array.toString());
 
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -321,6 +360,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     .getName();
         }
     }
-
 
 }
