@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp">
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
 
     <TextView
         android:id="@+id/tv_label"
@@ -14,5 +16,5 @@
         android:orientation="vertical"
         android:textColor="@color/white"
         android:textSize="14sp"
-        tools:text="主 页 专 题" />
+        tools:text="主 页 专 题"/>
 </FrameLayout>

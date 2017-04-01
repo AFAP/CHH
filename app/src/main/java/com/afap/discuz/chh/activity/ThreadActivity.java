@@ -152,8 +152,7 @@ public class ThreadActivity extends BaseActivity implements View.OnClickListener
 
                         String str = div_floors.get(0).child(0).child(0).child(0).child(1).child(1).html();
 
-//                        str = str.replaceAll("<img", "<img style='width: 100%;'").replaceAll
-//                                ("src=\"static/image/common/none.gif\"", "").replaceAll("zoomfile=", "src=");
+                        str = str.replaceAll("<img id=\"aimg_", "<img style=\"width: 100%;\" id=\"aimg_") ;
                         sb.append(str);
 
 

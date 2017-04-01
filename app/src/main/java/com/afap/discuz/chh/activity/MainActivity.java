@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        getForumNum();
+//        getForumNum();
     }
 
     @Override
