@@ -5,6 +5,7 @@
 
     <string name="open">open</string>
     <string name="close">close</string>
+    <string name="login">登录</string>
 
 
     <string name="loading">加载中</string>
@@ -19,11 +20,21 @@
     <string name="title_library">开源库</string>
 
 
+    <string name="load_login">正在登录</string>
+
+
     <string name="hint_comment">写评论</string>
+    <string name="prompt_login_username">请输入用户名</string>
+    <string name="prompt_login_password">请输入账户密码</string>
+
+    <string name="error_username_required">请输入用户名</string>
+    <string name="error_password_required">请输入密码</string>
+    <string name="error_invalid_email_or_password">用户名或密码错误，请重新输入</string>
+
+
 
 
     <string name="todev">待开发……</string>
-
     <string name="tip_about">
         \n
         1.该客户端为非官方应用；\n\n
@@ -38,6 +49,4 @@
     </string>
     <string name="tip_pic_saved_format">图片已保存至文件夹:%S</string>
     <string name="tip_exit">再按一次将退出应用</string>
-
-
 </resources>

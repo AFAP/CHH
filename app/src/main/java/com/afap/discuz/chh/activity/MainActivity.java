@@ -218,22 +218,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.avatar:
-                RxGalleryFinal
-                        .with(this)
-                        .image()
-                        .radio()
-                        .crop()
-                        .imageLoader(ImageLoaderType.FRESCO)
-                        .subscribe(new RxBusResultSubscriber<ImageRadioResultEvent>() {
-                            @Override
-                            protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
-                                //图片选择结果
-                                BuglyLog.w("ImageRadioResultEvent", imageRadioResultEvent.getResult().getCropPath());
+//                RxGalleryFinal
+//                        .with(this)
+//                        .image()
+//                        .radio()
+//                        .crop()
+//                        .imageLoader(ImageLoaderType.FRESCO)
+//                        .subscribe(new RxBusResultSubscriber<ImageRadioResultEvent>() {
+//                            @Override
+//                            protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
+//                                //图片选择结果
+//                                BuglyLog.w("ImageRadioResultEvent", imageRadioResultEvent.getResult().getCropPath());
+//
+//
+//                            }
+//                        })
+//                        .openGallery();
 
+                Intent intent = new Intent(this,LoginActivity.class);
+                startActivity(intent);
 
-                            }
-                        })
-                        .openGallery();
                 break;
         }
     }

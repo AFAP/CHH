@@ -43,6 +43,14 @@ public interface APIService {
             @Field("page") int page
     );
 
+    @FormUrlEncoded
+    @POST("login")
+    Observable<String> login(
+            @Field("username") String username,
+            @Field("password") String password
+    );
+
+
 
     @GET("forum.php")
     Observable<String> getForumMain();

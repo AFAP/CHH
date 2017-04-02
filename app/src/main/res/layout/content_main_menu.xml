@@ -14,7 +14,7 @@
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
         android:onClick="onClick"
-        android:visibility="gone"
+        android:visibility="visible"
         fresco:placeholderImage="@drawable/ic_avatar_1"
         fresco:placeholderImageScaleType="fitCenter"
         fresco:roundAsCircle="true"
