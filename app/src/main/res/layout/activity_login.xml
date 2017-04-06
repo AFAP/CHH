@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -53,6 +54,36 @@
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_login_code"
+                        android:imeActionLabel="@string/login"
+                        android:imeOptions="actionDone"
+                        android:maxLength="8" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/img_code"
+                    android:layout_width="130dp"
+                    android:layout_height="42dp"
+                    android:layout_gravity="center_vertical"
+                    android:onClick="onClick"
+                    fresco:placeholderImage="@drawable/ic_avatar_1"
+                    fresco:placeholderImageScaleType="fitCenter" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_login"

@@ -26,6 +26,7 @@
     <string name="hint_comment">写评论</string>
     <string name="prompt_login_username">请输入用户名</string>
     <string name="prompt_login_password">请输入账户密码</string>
+    <string name="prompt_login_code">请输入图片中的验证码</string>
 
     <string name="error_username_required">请输入用户名</string>
     <string name="error_password_required">请输入密码</string>

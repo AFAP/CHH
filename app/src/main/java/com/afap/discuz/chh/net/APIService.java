@@ -51,7 +51,6 @@ public interface APIService {
     );
 
 
-
     @GET("forum.php")
     Observable<String> getForumMain();
 
@@ -60,6 +59,19 @@ public interface APIService {
      */
     @GET("forum-{id}-{page}.html")
     Observable<String> getForumList(@Path("id") String articlehref, @Path("page") int page);
+
+
+    /**
+     * 获取登录页面初始信息
+     */
+    @GET("member.php?mod=logging&action=login")
+    Observable<String> getLoginInitInfo();
+
+    /**
+     * 获取登录页面初始信息
+     */
+    @GET("misc.php?mod=seccode&action=update")
+    Observable<String> getCodeInfo(@Query("idhash") String idhash, @Query("upload") double upload);
 
 //    @FormUrlEncoded
 //    @POST("api.php?act=act_register")
