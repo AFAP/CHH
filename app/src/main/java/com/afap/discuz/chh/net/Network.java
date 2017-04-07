@@ -56,16 +56,25 @@ public class Network {
                         }
                     })
                     .cookieJar(new CookieJar() {
-                        List<Cookie> cookielist;
+                        List<Cookie> cookielist = new ArrayList<>();
 
                         @Override
                         public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                            this.cookielist = cookies;
+                            for (int i = 0; i < cookies.size(); i++) {
+                                BuglyLog.w("saveFromResponse", cookies.get(i).toString());
+                            }
+
+                            this.cookielist.addAll(cookies);
                         }
 
                         @Override
                         public List<Cookie> loadForRequest(HttpUrl url) {
-                            return cookielist != null ? cookielist : new ArrayList<Cookie>();
+                            BuglyLog.d("loadForRequest", "--");
+                            for (int i = 0; i < cookielist.size(); i++) {
+                                BuglyLog.w("loadForRequest", cookielist.get(i).toString());
+                            }
+
+                            return cookielist  ;
                         }
                     })
                     .build();

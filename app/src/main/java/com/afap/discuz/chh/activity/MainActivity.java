@@ -103,6 +103,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             Intent intent = new Intent(this, LibraryActivity.class);
             startActivity(intent);
             return true;
+        } else if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -235,7 +239,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                        })
 //                        .openGallery();
 
-                Intent intent = new Intent(this,LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
 
                 break;

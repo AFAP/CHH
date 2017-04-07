@@ -75,14 +75,14 @@
 
                 </android.support.design.widget.TextInputLayout>
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/img_code"
                     android:layout_width="130dp"
                     android:layout_height="42dp"
                     android:layout_gravity="center_vertical"
                     android:onClick="onClick"
-                    fresco:placeholderImage="@drawable/ic_avatar_1"
-                    fresco:placeholderImageScaleType="fitCenter" />
+                    android:src="@drawable/ic_avatar_1"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
 
             <Button

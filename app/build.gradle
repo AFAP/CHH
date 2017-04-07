@@ -9,6 +9,7 @@ android {
         targetSdkVersion 21
         versionCode 3
         versionName "1.0.3"
+        vectorDrawables.useSupportLibrary = true
     }
 
 //    tasks.whenTaskAdded { task ->
@@ -28,31 +29,31 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:design:25.3.0'
 
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.squareup.retrofit2:converter-scalars:2.2.0'
-
-
-    compile 'com.facebook.fresco:fresco:1.1.0'
-    compile 'cn.finalteam.rxgalleryfinal:library:+'
-    compile 'me.relex:photodraweeview:1.1.2'
     // 图片选择器
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.tencent.bugly:crashreport:2.2.2'
     compile('in.srain.cube:ultra-ptr:1.0.9.1-SNAPSHOT@aar') {
         exclude group: 'in.srain.cube', module: 'clog'
     }
     compile('in.srain.cube:cube-sdk:1.0.44.33-SNAPSHOT@aar') {
         exclude group: 'in.srain.cube', module: 'clog'
     }
+
+
+    compile 'com.android.support:design:25.3.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.2.0'
+    compile 'com.facebook.fresco:fresco:1.1.0'
+    compile 'cn.finalteam.rxgalleryfinal:library:+'
+    compile 'me.relex:photodraweeview:1.1.2'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.tencent.bugly:crashreport:2.2.2'
     compile 'com.afap:utils:0.0.8@aar'
     compile 'org.greenrobot:greendao:2.2.1'
     compile 'org.greenrobot:greendao-generator:2.2.0'
-
     compile 'com.google.android:flexbox:0.2.6'
-
+    compile 'com.android.support:support-v4:25.3.0'
+    compile 'com.android.support:support-vector-drawable:25.3.0'
 }

@@ -8,4 +8,8 @@
         android:id="@+id/action_library"
         android:title="@string/action_library"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
 </menu>

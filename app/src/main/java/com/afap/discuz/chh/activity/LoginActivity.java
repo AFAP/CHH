@@ -1,12 +1,16 @@
 package com.afap.discuz.chh.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afap.discuz.chh.Constant;
@@ -22,10 +26,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -39,7 +49,7 @@ public class LoginActivity extends BaseActivity {
     private EditText mUsernameView;
     private EditText mPasswordView;
     private EditText mPCodeView;
-    private SimpleDraweeView mCodeImageView;
+    private ImageView mCodeImageView;
 
 
     @Override
@@ -52,7 +62,7 @@ public class LoginActivity extends BaseActivity {
         mUsernameView = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPCodeView = (EditText) findViewById(R.id.code);
-        mCodeImageView = (SimpleDraweeView) findViewById(R.id.img_code);
+        mCodeImageView = (ImageView) findViewById(R.id.img_code);
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -119,7 +129,29 @@ public class LoginActivity extends BaseActivity {
                         }
                         String imgUrl = Constant.HOST_APP + "misc.php" + strs.get(0);
                         BuglyLog.w("------->", imgUrl);
-                        mCodeImageView.setImageURI(imgUrl);
+
+                        Network
+                                .getAPIService()
+                                .getCodeImage(imgUrl)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new BaseSubscriber<ResponseBody>() {
+                                    @Override
+                                    public void onNext(ResponseBody responseBody) {
+                                        Bitmap bitmap = BitmapFactory.decodeStream(responseBody.byteStream());
+
+                                        mCodeImageView.setImageBitmap(bitmap);
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        super.onError(e);
+                                        // 后台刷新，错误不处理
+                                    }
+                                });
+
+
                     }
 
                     @Override
@@ -128,6 +160,55 @@ public class LoginActivity extends BaseActivity {
                         // 后台刷新，错误不处理
                     }
                 });
+    }
+    private boolean writeResponseBodyToDisk(ResponseBody body) {
+        try {
+            // todo change the file location/name according to your needs
+            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "Future Studio Icon.png");
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(futureStudioIconFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d("xx", "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 
