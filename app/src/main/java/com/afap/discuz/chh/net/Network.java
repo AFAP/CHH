@@ -25,6 +25,8 @@ public class Network {
     private static APIService apis;
     public static Map<String, String> mUrlMap = new HashMap<>();
 
+    private static String codeurl = "";
+
     public static APIService getAPIService() {
         if (apis == null) {
             // TODO 最后关闭日志
@@ -34,24 +36,30 @@ public class Network {
             // OkHttp3.0的使用方式
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .retryOnConnectionFailure(true)
-                    .addInterceptor(loggingInterceptor)
                     .addInterceptor(new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request request = chain.request();
                             String reqUrl = request.url().toString().replaceAll(Constant.HOST_APP, "");
 
-                            Request.Builder builder1 = request.newBuilder();
-                            Request build = builder1
+                            Request.Builder builder = request
+                                    .newBuilder()
                                     .addHeader("contentType", "text/html; charset=utf-8")
-                                    .addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) " +
-                                            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36")
-                                    .build();
+                                    // 这个很重要
+                                    .addHeader("user-agent", "Chrome/56.0.2924.87 Safari/537.36");
 
+                            // 如果是请求登录图片验证码的请求，需要记录下来，且在请求验证码图片时设置referer
+                            if (reqUrl.contains("mod=seccode&action=update")) {
+                                codeurl = request.url().toString();
+                            } else if (reqUrl.contains("mod=seccode&update=")) {
+                                builder.addHeader("referer", codeurl);
+                            }
 
+                            Request build = builder.build();
                             Response response = chain.proceed(build);
                             String rspUrl = response.request().url().toString().replaceAll(Constant.HOST_APP, "");
                             mUrlMap.put(reqUrl, rspUrl);
+
                             return response;
                         }
                     })
@@ -62,9 +70,11 @@ public class Network {
                         public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
                             for (int i = 0; i < cookies.size(); i++) {
                                 BuglyLog.w("saveFromResponse", cookies.get(i).toString());
-                            }
+                                if (!cookielist.contains(cookies.get(i))) {
+                                    cookielist.add(cookies.get(i));
+                                }
 
-                            this.cookielist.addAll(cookies);
+                            }
                         }
 
                         @Override
@@ -73,10 +83,10 @@ public class Network {
                             for (int i = 0; i < cookielist.size(); i++) {
                                 BuglyLog.w("loadForRequest", cookielist.get(i).toString());
                             }
-
-                            return cookielist  ;
+                            return cookielist;
                         }
                     })
+                    .addInterceptor(loggingInterceptor)
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()

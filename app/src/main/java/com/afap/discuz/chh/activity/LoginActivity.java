@@ -43,7 +43,7 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements OnClickListener {
 
 
     private EditText mUsernameView;
@@ -51,6 +51,7 @@ public class LoginActivity extends BaseActivity {
     private EditText mPCodeView;
     private ImageView mCodeImageView;
 
+    private String codeImgUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +76,21 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.btn_login).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
         init();
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_login:
+                attemptLogin();
+                break;
+            case R.id.img_code:
+                loadCodeView();
+                break;
+        }
+    }
+
 
     /**
      * 获取初始化信息，验证码什么的
@@ -123,34 +130,35 @@ public class LoginActivity extends BaseActivity {
                     public void onNext(String s) {
                         Pattern p = Pattern.compile("src=\"misc.php(.*?)\"");
                         Matcher m = p.matcher(s);
-                        ArrayList<String> strs = new ArrayList<>();
+                        ArrayList<String> urls = new ArrayList<>();
                         while (m.find()) {
-                            strs.add(m.group(1));
+                            urls.add(m.group(1));
                         }
-                        String imgUrl = Constant.HOST_APP + "misc.php" + strs.get(0);
-                        BuglyLog.w("------->", imgUrl);
+                        codeImgUrl = Constant.HOST_APP + "misc.php" + urls.get(0);
+                        loadCodeView();
+                    }
 
-                        Network
-                                .getAPIService()
-                                .getCodeImage(imgUrl)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new BaseSubscriber<ResponseBody>() {
-                                    @Override
-                                    public void onNext(ResponseBody responseBody) {
-                                        Bitmap bitmap = BitmapFactory.decodeStream(responseBody.byteStream());
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        // 后台刷新，错误不处理
+                    }
+                });
+    }
 
-                                        mCodeImageView.setImageBitmap(bitmap);
 
-                                    }
+    private void loadCodeView() {
+        Network
+                .getAPIService()
+                .getCodeImage(codeImgUrl)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseSubscriber<ResponseBody>() {
+                    @Override
+                    public void onNext(ResponseBody responseBody) {
+                        Bitmap bitmap = BitmapFactory.decodeStream(responseBody.byteStream());
 
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        super.onError(e);
-                                        // 后台刷新，错误不处理
-                                    }
-                                });
-
+                        mCodeImageView.setImageBitmap(bitmap);
 
                     }
 
@@ -161,56 +169,6 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
     }
-    private boolean writeResponseBodyToDisk(ResponseBody body) {
-        try {
-            // todo change the file location/name according to your needs
-            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "Future Studio Icon.png");
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            try {
-                byte[] fileReader = new byte[4096];
-
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(futureStudioIconFile);
-
-                while (true) {
-                    int read = inputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
-                    }
-
-                    outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
-
-                    Log.d("xx", "file download: " + fileSizeDownloaded + " of " + fileSize);
-                }
-
-                outputStream.flush();
-
-                return true;
-            } catch (IOException e) {
-                return false;
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            }
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
 
     private void attemptLogin() {
         mUsernameView.setError(null);
@@ -263,7 +221,5 @@ public class LoginActivity extends BaseActivity {
 
 
     }
-
-
 }
 
