@@ -6,6 +6,7 @@ import java.io.Serializable;
 public class BaseListAtom implements Serializable {
     protected String href;
     protected String title;
+    private int page_label = -1;
 
     public String getHref() {
         return href;
@@ -23,4 +24,11 @@ public class BaseListAtom implements Serializable {
         this.title = title;
     }
 
+    public int getPage_label() {
+        return page_label;
+    }
+
+    public void setPage_label(int page_label) {
+        this.page_label = page_label;
+    }
 }

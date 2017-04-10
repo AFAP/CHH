@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.afap.discuz.chh.R;
-import com.afap.discuz.chh.greendao.CategoryListAtom;
 import com.afap.discuz.chh.greendao.ForumListAtom;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -51,6 +50,7 @@ public class ForumListAdapter extends BaseAdapter {
             }
             convertView = mInflater.inflate(R.layout.atom_list_forum, null);
             mHolder.atom = convertView.findViewById(R.id.atom);
+            mHolder.page_label = (TextView) convertView.findViewById(R.id.page_label);
             mHolder.atom_author_avatar = (SimpleDraweeView) convertView.findViewById(R.id.atom_author_avatar);
             mHolder.atom_author = (TextView) convertView.findViewById(R.id.atom_author);
             mHolder.atom_num_view = (TextView) convertView.findViewById(R.id.atom_num_view);
@@ -68,12 +68,20 @@ public class ForumListAdapter extends BaseAdapter {
         mHolder.atom_num_comment.setText(atom.getNum_comment());
         mHolder.atom_time.setText(atom.getTime());
         mHolder.atom_title.setText(atom.getTitle());
+        if (atom.getPage_label() > 0) {
+            mHolder.page_label.setVisibility(View.VISIBLE);
+            mHolder.page_label.setText(String.format(convertView.getContext().getString(R.string.tip_page_label_format),
+                    String.valueOf(atom.getPage_label())));
+        } else {
+            mHolder.page_label.setVisibility(View.GONE);
 
+        }
         return convertView;
     }
 
     class ViewHolder {
         View atom;
+        TextView page_label;
         SimpleDraweeView atom_author_avatar;
         TextView atom_author;
         TextView atom_num_view;

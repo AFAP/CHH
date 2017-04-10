@@ -51,6 +51,7 @@ public class CategoryListAdapter extends BaseAdapter {
             }
             convertView = mInflater.inflate(R.layout.atom_list_category, null);
             mHolder.atom = convertView.findViewById(R.id.atom);
+            mHolder.page_label = (TextView) convertView.findViewById(R.id.page_label);
             mHolder.atom_img = (SimpleDraweeView) convertView.findViewById(R.id.atom_img);
             mHolder.atom_name = (TextView) convertView.findViewById(R.id.atom_name);
             mHolder.atom_desc = (TextView) convertView.findViewById(R.id.atom_desc);
@@ -62,11 +63,20 @@ public class CategoryListAdapter extends BaseAdapter {
         mHolder.atom_name.setText(atom.getTitle());
         mHolder.atom_desc.setText(atom.getContent());
         mHolder.atom_img.setImageURI(atom.getThumb_url());
+        if (atom.getPage_label() > 0) {
+            mHolder.page_label.setVisibility(View.VISIBLE);
+            mHolder.page_label.setText(String.format(convertView.getContext().getString(R.string.tip_page_label_format),
+                    String.valueOf(atom.getPage_label())));
+        } else {
+            mHolder.page_label.setVisibility(View.GONE);
+
+        }
         return convertView;
     }
 
     class ViewHolder {
         View atom;
+        TextView page_label;
         SimpleDraweeView atom_img;
         TextView atom_name;
         TextView atom_desc;

@@ -82,6 +82,9 @@ public class ForumListFragment extends BaseListFragment {
                         Document doc = Jsoup.parse(s);
 
                         List<ForumListAtom> list = ForumListAtom.parseFromDocument(doc, mCategory.getId());
+                        if (list.size() > 0) {
+                            list.get(0).setPage_label(currentPageNO);
+                        }
                         mAdapterList.addAll(list);
 
                         mAdapter.notifyDataSetChanged();

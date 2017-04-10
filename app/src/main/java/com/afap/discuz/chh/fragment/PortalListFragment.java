@@ -111,6 +111,9 @@ public class PortalListFragment extends BaseListFragment {
                         Document doc = Jsoup.parse(s);
 
                         List<CategoryListAtom> list = CategoryListAtom.parseFromDocument(doc, mCategory.getId());
+                        if (list.size() > 0) {
+                            list.get(0).setPage_label(currentPageNO);
+                        }
                         mAdapterList.addAll(list);
 
                         getAtomDao().insertInTx(list);
