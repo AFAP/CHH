@@ -48,6 +48,7 @@ public class LibraryActivity extends BaseActivity {
         mAdapterList = new ArrayList<>();
         mAdapterList.add(new Library("Okhttp", "", "https://github.com/square/okhttp"));
         mAdapterList.add(new Library("Retrofit", "", "https://github.com/square/retrofit"));
+        mAdapterList.add(new Library("RxJava", "", "https://github.com/ReactiveX/RxJava"));
         mAdapterList.add(new Library("Fresco", "图片加载库", "https://github.com/facebook/fresco"));
         mAdapterList.add(new Library("PhotoDraweeView", "", "https://github.com/ongakuer/PhotoDraweeView"));
         mAdapterList.add(new Library("RxGalleryFinal", "", "https://github.com/FinalTeam/RxGalleryFinal"));

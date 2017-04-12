@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         mPCodeView = (EditText) findViewById(R.id.code);
         mCodeImageView = (ImageView) findViewById(R.id.img_code);
 
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mPCodeView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
@@ -75,7 +75,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 return false;
             }
         });
-
         init();
     }
 

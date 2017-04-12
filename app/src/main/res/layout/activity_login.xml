@@ -46,9 +46,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_login_password"
-                    android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/login"
-                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"/>
@@ -69,9 +66,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_login_code"
+                        android:imeActionId="@+id/login"
                         android:imeActionLabel="@string/login"
                         android:imeOptions="actionDone"
-                        android:maxLength="8"/>
+                        android:maxLength="8"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
 
                 </android.support.design.widget.TextInputLayout>
 
