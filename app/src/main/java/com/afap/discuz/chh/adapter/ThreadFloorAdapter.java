@@ -1,5 +1,6 @@
 package com.afap.discuz.chh.adapter;
 
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,11 @@ import android.widget.TextView;
 
 import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
+import com.afap.discuz.chh.activity.PicBrowseActivity;
 import com.afap.discuz.chh.model.ThreadFloor;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,7 +47,7 @@ public class ThreadFloorAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ThreadFloor atom = mData.get(position);
+        final ThreadFloor atom = mData.get(position);
         ViewHolder mHolder = null;
         if (convertView == null) {
 
@@ -69,6 +72,19 @@ public class ThreadFloorAdapter extends BaseAdapter {
         mHolder.atom_time.setText(atom.getTime());
         mHolder.atom_floor_num.setText(atom.getFloorNum() + "F");
         mHolder.atom_img.setImageURI(atom.getAvatarUrl());
+
+        final View finalConvertView = convertView;
+        mHolder.atom_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> imgs = new ArrayList();
+                imgs.add(atom.getAvatarUrl().replaceAll("_middle","_big"));
+
+                Intent intent = new Intent(finalConvertView.getContext(), PicBrowseActivity.class);
+                intent.putStringArrayListExtra(PicBrowseActivity.KEY_LIST, imgs);
+                finalConvertView.getContext().startActivity(intent);
+            }
+        });
 
         mHolder.atom_webview.loadDataWithBaseURL(Constant.HOST_APP, atom.getContentHtml(), "text/html", "utf-8", null);
 
