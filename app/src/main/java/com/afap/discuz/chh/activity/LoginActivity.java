@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +17,7 @@ import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.discuz.chh.utils.ProgressUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.afap.utils.ToastUtil;
 import com.tencent.bugly.crashreport.BuglyLog;
 
 import org.jsoup.Jsoup;
@@ -26,11 +25,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,7 +42,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
     private EditText mUsernameView;
     private EditText mPasswordView;
-    private EditText mPCodeView;
+    private EditText mCodeView;
     private ImageView mCodeImageView;
 
     private String codeImgUrl = "";
@@ -62,10 +56,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
         mUsernameView = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPCodeView = (EditText) findViewById(R.id.code);
+        mCodeView = (EditText) findViewById(R.id.code);
         mCodeImageView = (ImageView) findViewById(R.id.img_code);
 
-        mPCodeView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mCodeView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
@@ -103,6 +97,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     public Observable<String> call(String s) {
                         Document doc = Jsoup.parse(s);
 
+                        formhash = doc.getElementsByAttributeValue("name", "formhash").get(0).attr("value");
+                        BuglyLog.w("formhash------->", formhash);
+
                         String funstr = "";
                         Elements scripts = doc.getElementsByAttributeValue("reload", "1");
                         for (int i = 0; i < scripts.size(); i++) {
@@ -113,11 +110,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                             }
                         }
                         if (!TextUtils.isEmpty(funstr)) {
-                            String hashcode = funstr.split("'")[1];
-                            BuglyLog.w("------->", hashcode);
+                            seccodehash = funstr.split("'")[1];
+                            BuglyLog.w("------->", seccodehash);
                             return Network
                                     .getAPIService()
-                                    .getCodeInfo(hashcode, Math.random());
+                                    .getCodeInfo(seccodehash, Math.random());
                         }
                         return null;
                     }
@@ -169,12 +166,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 });
     }
 
+    private String formhash = "";
+    private String seccodehash = "";
+
     private void attemptLogin() {
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String seccodeverify = mCodeView.getText().toString();
 
         if (TextUtils.isEmpty(username)) {
             mUsernameView.setError(getString(R.string.error_username_required));
@@ -184,12 +185,20 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             mPasswordView.setError(getString(R.string.error_password_required));
             mPasswordView.requestFocus();
             return;
+        } else if (TextUtils.isEmpty(seccodeverify)) {
+            ToastUtil.showShort(R.string.error_code_required);
+            return;
         }
 
 
+        String referer = "https://www.chiphell.com/home.php?mod=spacecp&ac=usergroup";
+        String questionid = "0";
+        String answer = "";
+        String seccodemodid = "member::logging";
+
         Network
                 .getAPIService()
-                .login(username, password)
+                .login(formhash, referer, username, password, questionid, seccodehash, seccodemodid, seccodeverify)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Action0() {
                     @Override

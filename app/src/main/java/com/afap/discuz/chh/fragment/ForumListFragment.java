@@ -11,6 +11,7 @@ import com.afap.discuz.chh.greendao.ForumListAtom;
 import com.afap.discuz.chh.model.Category;
 import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
+import com.tencent.bugly.crashreport.BuglyLog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -96,6 +97,7 @@ public class ForumListFragment extends BaseListFragment {
                                 String totalPageSTr = sp.getElementsByAttributeValueContaining("title", "共").text();
                                 totalPageSTr = totalPageSTr.replaceAll("页", "").replaceAll("/", "").trim();
                                 total_num = Integer.parseInt(totalPageSTr);
+                                BuglyLog.d("ForumListFragment", "totalPage: " + total_num);
                             } catch (Exception e) {
                                 total_num = 1;
                             }
