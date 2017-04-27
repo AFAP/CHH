@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.afap.discuz.chh.App;
 import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.adapter.CategoryAdapter;
@@ -26,6 +27,7 @@ import com.afap.discuz.chh.fragment.BaseListFragment;
 import com.afap.discuz.chh.fragment.PortalListFragment;
 import com.afap.discuz.chh.fragment.ForumListFragment;
 import com.afap.discuz.chh.model.Category;
+import com.afap.discuz.chh.model.User;
 import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.discuz.chh.widget.loading.LoadingState;
@@ -66,6 +68,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ViewPager mViewPager;
     private SimpleFragmentPagerAdapter mPagerAdapter;
 
+    private SimpleDraweeView mAvatarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +167,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 初始化左侧菜单
      */
     private void initLeftMenu() {
+        mAvatarView = (SimpleDraweeView) findViewById(R.id.avatar);
+
         // 实现左侧侧滑菜单
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_left);
         // 创建返回键，并实现打开关/闭监听
@@ -216,6 +221,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
         mRecyclerView.setAdapter(adapter);
+
+
+        if (App.getInstance().getUser() != null) {
+            User user = getApp().getUser();
+            mAvatarView.setImageURI(user.getAvatarUrl());
+            BuglyLog.e(")))))",user.getAvatarUrl());
+        }
+
+
     }
 
     @Override

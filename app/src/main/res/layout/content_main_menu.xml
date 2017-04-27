@@ -13,6 +13,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
         android:onClick="onClick"
         android:visibility="visible"
         fresco:placeholderImage="@drawable/ic_avatar_1"

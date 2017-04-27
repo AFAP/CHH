@@ -12,8 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afap.discuz.chh.App;
 import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
+import com.afap.discuz.chh.model.User;
 import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
 import com.afap.discuz.chh.utils.ProgressUtils;
@@ -198,7 +200,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
         Network
                 .getAPIService()
-                .login(formhash, referer, username, password, questionid, seccodehash, seccodemodid, seccodeverify)
+                .login(formhash, "", username, password, questionid, answer, seccodehash, seccodemodid, seccodeverify)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Action0() {
                     @Override
@@ -211,12 +213,20 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 .subscribe(new BaseSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-                        Document doc = Jsoup.parse(s);
-
-                        // TODO: 2017/4/2
                         ProgressUtils.dismiss();
-                        mPasswordView.setError(getString(R.string.error_invalid_email_or_password));
-                        mPasswordView.requestFocus();
+
+                        if (s.contains("验证码填写错误")) {
+                            ToastUtil.showShort(R.string.error_code_invalid);
+                            return;
+                        } else if (s.contains("登录失败")) {
+                            mPasswordView.setError(getString(R.string.error_invalid_email_or_password));
+                            mPasswordView.requestFocus();
+                            return;
+                        } else if (s.contains("现在将转入登录前页面")) {
+                            ToastUtil.showShort("登录成功");
+                            getInitInfo();
+                            return;
+                        }
                     }
 
                     @Override
@@ -226,8 +236,41 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                         super.onError(e);
                     }
                 });
-
-
     }
+
+    /**
+     * 登录成功后重新刷新主页，获取用户ID和名称
+     */
+    private void getInitInfo() {
+        Network
+                .getAPIService()
+                .getForumMain()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseSubscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        Document doc = Jsoup.parse(s);
+                        Elements as = doc.getElementsByAttributeValue("title", "访问我的空间");
+                        if (as != null && as.size() > 0) {
+                            Element a = as.get(0);
+                            String name = a.text();
+                            String id = a.attr("href");
+                            id = id.replaceAll("space-uid-", "").replaceAll(".html", "");
+                            User user = new User();
+                            user.setUser_id(id);
+                            user.setUser_name(name);
+
+                            App.getInstance().saveUser(user);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+                });
+    }
+
 }
 
