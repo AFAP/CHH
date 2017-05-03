@@ -17,10 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.afap.discuz.chh.App;
-import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.adapter.CategoryAdapter;
 import com.afap.discuz.chh.fragment.BaseListFragment;
@@ -30,7 +28,6 @@ import com.afap.discuz.chh.model.Category;
 import com.afap.discuz.chh.model.User;
 import com.afap.discuz.chh.net.BaseSubscriber;
 import com.afap.discuz.chh.net.Network;
-import com.afap.discuz.chh.widget.loading.LoadingState;
 import com.afap.utils.ContextUtil;
 import com.afap.utils.ToastUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -45,13 +42,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
-import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType;
-import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultSubscriber;
-import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -69,6 +61,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private SimpleFragmentPagerAdapter mPagerAdapter;
 
     private SimpleDraweeView mAvatarView;
+
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +126,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initData() {
+        mUser = getApp().getUser();
+
         mCategorys = new ArrayList<>();
 
         String arrstr = ContextUtil.getStringFromAsset(this, "category.js", null);
@@ -223,10 +219,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mRecyclerView.setAdapter(adapter);
 
 
-        if (App.getInstance().getUser() != null) {
-            User user = getApp().getUser();
-            mAvatarView.setImageURI(user.getAvatarUrl());
-            BuglyLog.e(")))))",user.getAvatarUrl());
+        if (mUser != null) {
+            mAvatarView.setImageURI(mUser.getAvatarUrl());
+            BuglyLog.e(")))))", mUser.getAvatarUrl());
         }
 
 
@@ -253,8 +248,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                        })
 //                        .openGallery();
 
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                if (mUser != null) {
+                    Intent intent = new Intent(this, UserInfoActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
 
                 break;
         }

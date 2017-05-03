@@ -1,0 +1,106 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/avatar"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:layout_gravity="center_horizontal"
+                android:onClick="onClick"
+                android:visibility="visible"
+                fresco:placeholderImage="@drawable/ic_avatar_1"
+                fresco:placeholderImageScaleType="fitCenter"
+                fresco:roundAsCircle="true"
+                fresco:viewAspectRatio="1" />
+
+            <TextView
+                android:id="@+id/userinfo_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="6dp"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                tools:text="AFAP" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:divider="@drawable/divider_h_1"
+                android:orientation="horizontal"
+                android:showDividers="middle">
+
+                <LinearLayout style="@style/UserInfo_Tab">
+
+                    <TextView
+                        style="@style/UserInfo_Tab_Title"
+                        android:text="@string/user_info_group" />
+
+                    <TextView
+                        style="@style/UserInfo_Tab_Text"
+                        android:text="实习天使" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/UserInfo_Tab">
+
+                    <TextView
+                        style="@style/UserInfo_Tab_Title"
+                        android:text="@string/user_info_activity" />
+
+                    <TextView
+                        style="@style/UserInfo_Tab_Text"
+                        android:text="6小时" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/UserInfo_Tab">
+
+                    <TextView
+                        style="@style/UserInfo_Tab_Title"
+                        android:text="@string/user_info_points" />
+
+                    <TextView
+                        style="@style/UserInfo_Tab_Text"
+                        android:text="88" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/UserInfo_Tab">
+
+                    <TextView
+                        style="@style/UserInfo_Tab_Title"
+                        android:text="@string/user_info_eval" />
+
+                    <TextView
+                        style="@style/UserInfo_Tab_Text"
+                        android:text="66" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
