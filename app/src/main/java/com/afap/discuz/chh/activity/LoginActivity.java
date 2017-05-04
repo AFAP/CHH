@@ -192,8 +192,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             return;
         }
 
-
-        String referer = "https://www.chiphell.com/home.php?mod=spacecp&ac=usergroup";
+        String referer = "https://www.chiphell.com/portal.php?mod=spacecp&ac=usergroup";
         String questionid = "0";
         String answer = "";
         String seccodemodid = "member::logging";
