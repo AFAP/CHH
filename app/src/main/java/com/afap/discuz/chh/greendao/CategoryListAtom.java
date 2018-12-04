@@ -97,7 +97,7 @@ public class CategoryListAtom extends BaseListAtom implements Serializable {
 
             Elements imgs = dl.child(1).getElementsByTag("img");
             if (imgs.size() > 0) {
-                img_url = Constant.HOST_APP + imgs.get(0).attr("src");
+                img_url = imgs.get(0).attr("src");
             }
 
             CategoryListAtom atom = new CategoryListAtom(cat, href, title, desc, time, img_url);

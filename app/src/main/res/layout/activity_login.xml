@@ -33,8 +33,7 @@
                     android:hint="@string/prompt_login_username"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:text="aepn"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -49,8 +48,7 @@
                     android:hint="@string/prompt_login_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:text="Kuancpu9835"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 

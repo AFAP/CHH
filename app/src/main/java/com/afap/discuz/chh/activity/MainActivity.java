@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,8 @@ import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.afap.utils.ContextUtil.getStringFromAsset;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
@@ -80,6 +83,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+        String aaa = ContextUtil.getStringFromAsset(MainActivity.this, "aa.html", null);
+        Document doc = Jsoup.parse(aaa);
+        Elements vs = doc.getElementsByAttributeValue("class", "row blocksList");
+        String hhh = "";
+
+        for (Element e : vs) {
+            String ss = "";
+            String time = e.getElementsByTag("button").get(0).getElementsByTag("span").get(0).attr("title");
+            Elements ps = e.getElementsByTag("p");
+            for(int i = 0;i<ps.size();i=i+5){
+
+
+            String TransactionID = ps.get(i+1).getElementsByTag("a").get(0).text();
+            String OutputID = ps.get(i+2).getElementsByTag("a").get(0).text();
+            String Amount = ps.get(i+3).text();
+            String Receiver = ps.get(i+4).getElementsByTag("a").get(0).text();
+                hhh = hhh + time+";"+TransactionID+";"+OutputID+";"+Amount+";"+Receiver +"\n";
+            }
+
+
+//            Log.w("***", time);
+        }
+        System.out.println(hhh);
 
 //        getForumNum();
     }
@@ -130,7 +157,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mCategorys = new ArrayList<>();
 
-        String arrstr = ContextUtil.getStringFromAsset(this, "category.js", null);
+        String arrstr = getStringFromAsset(this, "category.js", null);
         try {
             JSONArray array = new JSONArray(arrstr);
             for (int i = 0; i < array.length(); i++) {
