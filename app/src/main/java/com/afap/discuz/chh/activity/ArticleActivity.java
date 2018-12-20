@@ -218,7 +218,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         ArrayList<String> picList = new ArrayList<>();
         String[] pics = aaa.split(";");
         for (int i = 0; i < pics.length; i++) {
-            picList.add(Constant.HOST_APP + pics[i]);
+            picList.add(pics[i]);
         }
 
         Intent intent = new Intent(this, PicBrowseActivity.class);
