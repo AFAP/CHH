@@ -17,7 +17,7 @@ function browsePictures(objid) {
         }
 	}
 
-	window.chhWebView.jsLoadPictures(mainImgs.join(';'),index);
+	window.nativeClient.jsLoadPictures(mainImgs.join(';'),index);
 }
 
 function attachimggroup(pid) {

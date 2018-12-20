@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afap.discuz.chh.Constant;
 import com.afap.discuz.chh.R;
 import com.afap.discuz.chh.utils.Util;
 import com.afap.utils.ToastUtil;
@@ -30,6 +31,7 @@ import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.tencent.bugly.crashreport.BuglyLog;
 
 import java.io.File;
 import java.util.List;
@@ -95,9 +97,14 @@ public class PicBrowseActivity extends Activity {
 
         @Override
         public Object instantiateItem(ViewGroup view, int position) {
+            BuglyLog.i("PicBrowseActivity", mPics.get(position));
+            String url = mPics.get(position);
+            if (!url.startsWith("http") || !url.startsWith("//")) {
+                url = Constant.HOST_APP + url;
+            }
             final PhotoDraweeView photoDraweeView = new PhotoDraweeView(view.getContext());
             PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-            controller.setUri(Uri.parse(mPics.get(position)));
+            controller.setUri(Uri.parse(url));
             controller.setOldController(photoDraweeView.getController());
             controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
                 @Override
